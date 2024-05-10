@@ -23,14 +23,23 @@ export const InputContainer = styled.div`
 `;
 
 export const LiContainer = styled.li`
-    list-style:none;
+    padding-left: 0px;
+    list-style: none;
+`;
+
+export const UlContainer = styled.ul`
+    padding-left: 0px;
+    list-style: none;
 `;
 
 export const ButtonContainer = styled.button`
     border: 0;
     background-color: transparent;
     margin-right: 20px;
-    width: 800px;
+    display: flex;
+    flex-direction: row;
+    justifyContent: 'center',
+    textAlign: 'center',
 `;
 
 export const TitleContainer = styled.span`
@@ -44,3 +53,4 @@ export const InputFieldContainer = styled.div`
     display: flex;
     justify-content: center;
 `;
+

@@ -2,7 +2,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import './App.css';
 
 import { Main } from './pages/main/main';
-import { SignIn } from './pages/signin/signin';
+import { Home } from './pages/Home/home';
 import { Header } from './components/header';
 
 //import axios from 'axios';
@@ -20,7 +20,7 @@ function App() {
         >
         </Route>
         <Route exact path="/main" element={<Main />}></Route>
-        <Route exact path="/sign-in" element={<SignIn />}></Route>
+        <Route exact path="/home" element={<Home />}></Route>
       </Routes>
     </Router>
   );

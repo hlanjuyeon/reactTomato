@@ -9,8 +9,24 @@ export const TodoItemInputField = (props) => {
     // input 상태 : 비어있는 상태로 초기화
     const [input, setInput] = useState("");
 
+    const getCurrentDate = () => {
+
+        // 현재 날짜를 가져옵니다.
+        const today = new Date();
+        
+        // 원하는 형식으로 날짜를 설정합니다.
+        const formattedDate = `${today.getFullYear()}/ ${today.getMonth() + 1}/ ${today.getDate()}/`;
+        
+            return formattedDate;
+        }
+        
+
     const onSubmit = () => {
-        props.onSubmit(input);
+        const todoItem = {
+            content: input,
+            date: getCurrentDate(),
+        }
+        props.onSubmit(todoItem);
         setInput("");
     };
     /*

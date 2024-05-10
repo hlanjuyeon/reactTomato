@@ -1,26 +1,21 @@
+import { NextUpBox, TitleNextUp, NumComplete } from "./styled";
+
 import { React, useState } from 'react';
-
-import { TodoItemInputField } from '../../components/TodoItemInputField';
-import { TodoItemList } from '../../components/TodoItemList';
-
-import { Container, List } from './styled';
-
-import { CompleteList } from '../../components/stateList/CompleteList';
-import { InProgressList } from '../../components/stateList/InProgressList';
-import { NextUpList } from '../../components/stateList/NextUpList';
-import { TrashList } from '../../components/stateList/TrashList';
+import { TodoItemList } from "../TodoItemList";
+import { TodoItemInputField } from "../TodoItemInputField";
 
 let todoItemId = 0;
 
-export const Main = () => {
-
+export const NextUpList = (props) => {
+    
     const [todoItemList, setTodoItemList] = useState([]);
 
     // ...array (나머지 매개변수) : 개수가 정해지지 않은 배열을 선언할 때
-    const onSubmit = (newTodoItem) => {
+    const onSubmit = (content, date) => {
         setTodoItemList([...todoItemList, {
             id: todoItemId++, // TodoItem이 추가할 때마다 id가 1씩 증가 -> 고유번호 부여
-            todoItemContent: newTodoItem,
+            todoItemContent: content,
+            todoItemDate: date,
             isFinished: false, // newTodoItem이므로, 추가된 직후 상태는 '완료되지 않은 상태'로 설정
         }]);
     };
@@ -32,6 +27,7 @@ export const Main = () => {
                 return {
                     id: clickedTodoItem.id,
                     todoItemContent: clickedTodoItem.todoItemContent,
+                    todoItemDate: clickedTodoItem.todoItemDate,
                     isFinished: !clickedTodoItem.isFinished, // "!"을 사용해서 true로 전환
                 };
             } else {
@@ -54,14 +50,17 @@ export const Main = () => {
     };
 
     return (
-        <Container>
-            <TodoItemInputField onSubmit={onSubmit} />
-            <List>
-                <NextUpList></NextUpList>
-                <InProgressList></InProgressList>
-                <CompleteList></CompleteList>
-                <TrashList></TrashList>
-            </List>
-        </Container>
+        <NextUpBox>
+            <TitleNextUp>Next UP</TitleNextUp>
+            <NumComplete>11</NumComplete>
+            <div>
+                <TodoItemInputField onSubmit={onSubmit} />
+                <TodoItemList
+                    todoItemList={todoItemList}
+                    onTodoItemClick={onTodoItemClick}
+                    onRemoveClick={onRemoveClick}
+                />
+            </div>
+        </NextUpBox>
     );
 }

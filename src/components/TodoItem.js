@@ -1,7 +1,16 @@
 import React from "react";
-import Button from '@mui/material/Button';
-import { ButtonContainer, LiContainer, TitleContainer, CheckContainer } from "./styled";
+
 import { Checkbox } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { ButtonContainer } from "./styled";
+
+import { ListItemCSS, ListItemButtonCSS, ListItemTextCSS } from "./styledSystem";
+import { High } from "./priority/High";
+import { Low } from "./priority/Low";
+import { Medium } from "./priority/Medium";
 
 export const TodoItem = (props) => {
 
@@ -17,17 +26,28 @@ export const TodoItem = (props) => {
         2. 다만, todoItem이 '완료 상태'가 되었더라도, checkbox에 '체크 표시'를 하는 기능은 없음
         3. 그래서 checked 속성을 이용해 isFinished가 true라면 checked를 하도록 설정함
     */
+
     return (
-        <LiContainer>
-            <ButtonContainer button onClick={() => props.onTodoItemClick(props.todoItem)} style={noneButtonStyle}>
-                <CheckContainer>
-                    <Checkbox checked={props.todoItem.isFinished} />
-                </CheckContainer>
-                <TitleContainer span style={CompleteStyle} >
-                    {props.todoItem.todoItemContent}
-                </TitleContainer>
+        <ListItemCSS secondaryAction={
+            <IconButton edge="end" aria-label="comments" onClick={() => props.onRemoveClick(props.todoItem)}>
+                <DeleteIcon />
+            </IconButton>
+        }>
+            <ButtonContainer style={noneButtonStyle} onClick={() => props.onTodoItemClick(props.todoItem)} dense>
+                <ListItemIcon>
+                    <Checkbox
+                        edge="start"
+                        checked={props.todoItem.isFinished}
+                        disableRipple
+                    />
+                </ListItemIcon>
+                <ListItemTextCSS style={CompleteStyle} primary={props.todoItem.todoItemContent} />
             </ButtonContainer>
-            <Button variant="outlined" onClick={() => props.onRemoveClick(props.todoItem)}>Remove</Button>
-        </LiContainer>
+            <High></High>
+            <Medium></Medium>
+            <Low></Low>
+            <div>작성날짜</div>
+        </ListItemCSS>
     );
+
 }

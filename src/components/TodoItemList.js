@@ -1,5 +1,6 @@
 import React from "react";
 import { TodoItem } from "./TodoItem";
+import { UlContainer } from "./styled";
 
 export const TodoItemList = (props) => {
 
@@ -18,6 +19,6 @@ export const TodoItemList = (props) => {
     });
 
     return (
-        <ul>{todoList}</ul>
+        <UlContainer>{todoList}</UlContainer>
     );
 }
