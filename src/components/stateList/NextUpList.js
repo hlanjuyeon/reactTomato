@@ -1,4 +1,4 @@
-import { NextUpBox, TitleNextUp, NumComplete } from "./styled";
+import { NextUpBox, TitleNextUp, NumNextUp } from "./styled";
 
 import { React, useState } from 'react';
 import { TodoItemList } from "../TodoItemList";
@@ -11,11 +11,10 @@ export const NextUpList = (props) => {
     const [todoItemList, setTodoItemList] = useState([]);
 
     // ...array (나머지 매개변수) : 개수가 정해지지 않은 배열을 선언할 때
-    const onSubmit = (content, date) => {
+    const onSubmit = (NewTodoItem) => {
         setTodoItemList([...todoItemList, {
             id: todoItemId++, // TodoItem이 추가할 때마다 id가 1씩 증가 -> 고유번호 부여
-            todoItemContent: content,
-            todoItemDate: date,
+            todoItemContent: NewTodoItem,
             isFinished: false, // newTodoItem이므로, 추가된 직후 상태는 '완료되지 않은 상태'로 설정
         }]);
     };
@@ -27,7 +26,6 @@ export const NextUpList = (props) => {
                 return {
                     id: clickedTodoItem.id,
                     todoItemContent: clickedTodoItem.todoItemContent,
-                    todoItemDate: clickedTodoItem.todoItemDate,
                     isFinished: !clickedTodoItem.isFinished, // "!"을 사용해서 true로 전환
                 };
             } else {
@@ -52,7 +50,7 @@ export const NextUpList = (props) => {
     return (
         <NextUpBox>
             <TitleNextUp>Next UP</TitleNextUp>
-            <NumComplete>11</NumComplete>
+            <NumNextUp></NumNextUp><br />
             <div>
                 <TodoItemInputField onSubmit={onSubmit} />
                 <TodoItemList

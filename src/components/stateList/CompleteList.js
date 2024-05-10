@@ -6,7 +6,7 @@ export const CompleteList  = (props) => {
     return (
         <CompleteBox>
                 <TitleComplete>Complete</TitleComplete>
-                <NumComplete>11</NumComplete>
+                <NumComplete>1 (글 개수)</NumComplete>
         </CompleteBox>
     );
 }

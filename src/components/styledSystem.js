@@ -1,7 +1,6 @@
 import { styled } from "@mui/system";
 
 import ListItem from '@mui/material/ListItem';
-
 import ListItemText from '@mui/material/ListItemText';
 
 export const ListItemCSS = styled(ListItem)({

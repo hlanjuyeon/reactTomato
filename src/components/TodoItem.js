@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { ButtonContainer } from "./styled";
 
-import { ListItemCSS, ListItemButtonCSS, ListItemTextCSS } from "./styledSystem";
+import { ListItemCSS, ListItemTextCSS } from "./styledSystem";
 import { High } from "./priority/High";
 import { Low } from "./priority/Low";
 import { Medium } from "./priority/Medium";
@@ -46,7 +46,7 @@ export const TodoItem = (props) => {
             <High></High>
             <Medium></Medium>
             <Low></Low>
-            <div>작성날짜</div>
+            <div>마감날짜</div>
         </ListItemCSS>
     );
 

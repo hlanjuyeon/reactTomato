@@ -1,15 +1,13 @@
 import React from "react";
-import Button from '@mui/material/Button';
-import { ButtonContainer, LiContainer, TitleContainer, CheckContainer } from "../styled";
-import { Checkbox } from "@mui/material";
-import { InProgressBox, TitleInProgress, NumComplete } from "./styled";
+
+import { InProgressBox, TitleInProgress, NumComplete, NumInProgress } from "./styled";
 
 export const InProgressList = (props) => {
 
     return (
         <InProgressBox>
                 <TitleInProgress>In Progress</TitleInProgress>
-                <NumComplete>11</NumComplete>
+                <NumInProgress>1 (글 개수)</NumInProgress>
         </InProgressBox>
     );
 }

@@ -7,9 +7,9 @@ const PORT    = 1004; // 포트번호 설정
 // MySQL 연결
 const db = mysql.createPool({
     host: "127.0.0.1", // 호스트
-    user: "root",      // 데이터베이스 계정
-    password: "",      // 데이터베이스 비밀번호
-    database: "star",  // 사용할 데이터베이스
+    user: "newuser",      // 데이터베이스 계정
+    password: "newuser",      // 데이터베이스 비밀번호
+    database: "todolist_db",  // 사용할 데이터베이스
 });
 
 app.use(cors({

@@ -65,3 +65,6 @@ export const Main = () => {
         </Container>
     );
 }
+
+// 정렬 : 최신순 (작성일자 내림차순)
+// TodoItem 속성 추가 : 우선순위, 마감기한, 작성일자, isFinished는 State로 변경

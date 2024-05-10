@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { InputContainer, InputFieldContainer, HeaderContainer } from "./styled";
+import { InputContainer, InputFieldContainer } from "./styled";
 
 // ToDoList 입력필드
 export const TodoItemInputField = (props) => {
@@ -11,10 +11,8 @@ export const TodoItemInputField = (props) => {
 
     const getCurrentDate = () => {
 
-        // 현재 날짜를 가져옵니다.
         const today = new Date();
         
-        // 원하는 형식으로 날짜를 설정합니다.
         const formattedDate = `${today.getFullYear()}/ ${today.getMonth() + 1}/ ${today.getDate()}/`;
         
             return formattedDate;
@@ -22,13 +20,10 @@ export const TodoItemInputField = (props) => {
         
 
     const onSubmit = () => {
-        const todoItem = {
-            content: input,
-            date: getCurrentDate(),
-        }
-        props.onSubmit(todoItem);
+        props.onSubmit(input);
         setInput("");
     };
+
     /*
         OnChange 기능
 
@@ -47,4 +42,9 @@ export const TodoItemInputField = (props) => {
             <Button variant="outlined" onClick={onSubmit}>Submit</Button>
         </InputFieldContainer>
     );
+
 }
+
+// input date : 마감기한
+// select : 우선순위
+// hidden : 작성일자 (현재 날짜 및 시간)
