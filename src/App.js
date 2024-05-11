@@ -11,7 +11,6 @@ function App() {
 
   return (
     <Router>
-      <Header></Header>
       <Routes>
         <Route
           exact

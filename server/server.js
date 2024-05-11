@@ -26,6 +26,7 @@ app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 });
 
+// sqlQuery
 app.get("/api/company", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     
@@ -35,3 +36,13 @@ app.get("/api/company", (req, res) => {
         res.send(result);
     });
 });
+
+<Button onClick={() => {
+    // npm i axios | yarn add axios
+    axios.get("http://localhost:3001/api/company")
+        .then((res: any) => {
+            console.log(res);
+        }).catch((err: any) => {
+            console.log(err);
+        })
+}}>api 호출하기</Button>

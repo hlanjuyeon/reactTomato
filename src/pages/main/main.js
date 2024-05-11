@@ -9,6 +9,7 @@ import { CompleteList } from '../../components/stateList/CompleteList';
 import { InProgressList } from '../../components/stateList/InProgressList';
 import { NextUpList } from '../../components/stateList/NextUpList';
 import { TrashList } from '../../components/stateList/TrashList';
+import { Header } from '../../components/header';
 
 let todoItemId = 0;
 
@@ -54,15 +55,18 @@ export const Main = () => {
     };
 
     return (
-        <Container>
-            <TodoItemInputField onSubmit={onSubmit} />
-            <List>
-                <NextUpList></NextUpList>
-                <InProgressList></InProgressList>
-                <CompleteList></CompleteList>
-                <TrashList></TrashList>
-            </List>
-        </Container>
+        <>
+            <Header />
+            <Container>
+                <TodoItemInputField onSubmit={onSubmit} />
+                <List>
+                    <NextUpList></NextUpList>
+                    <InProgressList></InProgressList>
+                    <CompleteList></CompleteList>
+                    <TrashList></TrashList>
+                </List>
+            </Container>
+        </>
     );
 }
 
