@@ -18,8 +18,11 @@ export const CheckContainer = styled.div`
 `;
 
 export const InputContainer = styled.div`
-    display: inline;
-    margin-right: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    vertical-align: middle;
 `;
 
 export const LiContainer = styled.li`

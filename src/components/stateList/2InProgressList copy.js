@@ -1,12 +1,10 @@
-import { NextUpBox, TitleNextUp, NumNextUp } from "./styled";
-
-import { React, useEffect, useState } from 'react';
-import { TodoList } from "../todoList";
-import { TodoitemInput } from "../todoitemInput";
-import { TodoItem } from "../todoItem";
+import React, { useEffect } from "react";
+import { InProgressBox, TitleInProgress, NumComplete, NumInProgress } from "./styled";
 import { UlContainer } from "../styled";
+import { TodoItem } from "../todoItem";
 
-export const NextUpList = ({
+
+export const InProgressList = ({
     todoList,
     actionmode,
     handlelist,
@@ -17,9 +15,9 @@ export const NextUpList = ({
     }, []);
 
     return (
-        <NextUpBox>
-            <TitleNextUp>In Progress</TitleNextUp>
-            <NumNextUp>{todoList.length} (글 개수)</NumNextUp>
+        <InProgressBox>
+            <TitleInProgress>In Progress</TitleInProgress>
+            <NumInProgress>1 (글 개수)</NumInProgress>
             <UlContainer>
                 {todoList.data && todoList.data.map((todoitem) => {
                     return (<>
@@ -33,6 +31,6 @@ export const NextUpList = ({
                     );
                 })}
             </UlContainer>
-        </NextUpBox>
+        </InProgressBox>
     );
 };

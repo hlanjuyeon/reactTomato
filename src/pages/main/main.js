@@ -1,74 +1,117 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 
-import { TodoItemInputField } from '../../components/TodoItemInputField';
-import { TodoItemList } from '../../components/TodoItemList';
+import { TodoList } from '../../components/todoList';
 
 import { Container, List } from './styled';
 
-import { CompleteList } from '../../components/stateList/CompleteList';
-import { InProgressList } from '../../components/stateList/InProgressList';
-import { NextUpList } from '../../components/stateList/NextUpList';
-import { TrashList } from '../../components/stateList/TrashList';
 import { Header } from '../../components/header';
+import axios from 'axios';
+import { TodoitemInput } from '../../components/todoitemInput';
+import { NextUpList } from '../../components/stateList/NextUpList';
+import { InProgressList } from '../../components/stateList/InProgressList';
+import { CompleteList } from '../../components/stateList/CompleteList';
+import { TrashList } from '../../components/stateList/TrashList';
 
-let todoItemId = 0;
 
 export const Main = () => {
 
-    const [todoItemList, setTodoItemList] = useState([]);
+    // List 저장
+    const [todoList, setTodoList] = useState([]);
 
-    // ...array (나머지 매개변수) : 개수가 정해지지 않은 배열을 선언할 때
-    const onSubmit = (newTodoItem) => {
-        setTodoItemList([...todoItemList, {
-            id: todoItemId++, // TodoItem이 추가할 때마다 id가 1씩 증가 -> 고유번호 부여
-            todoItemContent: newTodoItem,
-            isFinished: false, // newTodoItem이므로, 추가된 직후 상태는 '완료되지 않은 상태'로 설정
-        }]);
-    };
+    // Item 조회
+    const [todoItem, setTodoItem] = useState({});
 
-    const onTodoItemClick = (clickedTodoItem) => {
-        setTodoItemList(todoItemList.map((todoItem) => {
-            // 클릭한 TodoItem과 todoItemList의 저장된 todoItem이 동일한지 비교 후, 동일하다면 완료 처리
-            if (clickedTodoItem.id === todoItem.id) {
-                return {
-                    id: clickedTodoItem.id,
-                    todoItemContent: clickedTodoItem.todoItemContent,
-                    isFinished: !clickedTodoItem.isFinished, // "!"을 사용해서 true로 전환
-                };
-            } else {
-                return todoItem; // 동일하지 않다면, 완료처리가 되지 않은 todoItem을 그대로 반환
-            }
-        }));
-    };
+    // 0(insert), 1(detail), 2(update)
+    const [actionMode, setActionMode] = useState({ mode: 0 });
 
-    /*
-        filter
+    // List 조회 Function
+    const getList = async () => {
+        await axios
+            .get(`http://localhost:3700/list`) // 빈 객체 전달
+            .then((res) => {
 
-        배열에서 특정 항목을 제거할 때 사용하는 함수
-        => removedTodoItem과 일치하지 않는 todoItem들을 구별해서,
-        그 todoItem들을 새로운 배열로 반환
-    */
-    const onRemoveClick = (removedTodoItem) => {
-        setTodoItemList(todoItemList.filter((todoItem) => {
-            return todoItem.id !== removedTodoItem.id;
-        }));
+                setTodoList(
+                    res.data
+                );
+
+                setActionMode({
+                    mode: 0, // 글쓰기
+                });
+            }).catch((e) => {
+                console.error(e);
+            })
+    }
+
+    // 특정 Item 조회
+    const handleDetail = async (id) => {
+        await axios
+            .post("http://localhost:3700/detail", { id })
+            .then((res) => {
+                console.log("detail => ", res);
+
+                if (res.data && res.data.length > 0) {
+                    setTodoItem(
+                        res.data[0]
+                    );
+
+                    setActionMode({
+                        mode: 1,
+                    });
+                }
+            })
+            .catch((e) => {
+                console.error(e);
+            })
+    }
+
+    // 특정 Item Update
+    const handleUpdate = () => {
+        console.log("handleUpdate => ", todoItem);
+
+        axios
+            .post("http://localhost:3700/update", {
+                todoitem: todoItem,
+            })
+            /* 그냥 예시임
+            .then((res) =? {
+                console.log("handleUpdate(changedRows) =>", res.data.changedRows)
+            }) */
+            .then(() => {
+                getList();
+            })
+            .catch((e) => {
+                console.error(e);
+            });
     };
 
     return (
         <>
             <Header />
             <Container>
-                <TodoItemInputField onSubmit={onSubmit} />
+                <TodoitemInput handlelist={getList} />
                 <List>
-                    <NextUpList></NextUpList>
-                    <InProgressList></InProgressList>
-                    <CompleteList></CompleteList>
-                    <TrashList></TrashList>
+                    <NextUpList
+                        todoList={todoList}
+                        actionmode={actionMode}
+                        handlelist={getList}
+                        handledetail={handleDetail}></NextUpList>
+                    <InProgressList
+                        todoList={todoList}
+                        actionmode={actionMode}
+                        handlelist={getList}
+                        handledetail={handleDetail}></InProgressList>
+                    <CompleteList
+                        todoList={todoList}
+                        actionmode={actionMode}
+                        handlelist={getList}
+                        handledetail={handleDetail}></CompleteList>
+                    <TrashList
+                        todoList={todoList}
+                        actionmode={actionMode}
+                        handlelist={getList}
+                        handledetail={handleDetail}></TrashList>
                 </List>
             </Container>
         </>
     );
 }
-
-// 정렬 : 최신순 (작성일자 내림차순)
-// TodoItem 속성 추가 : 우선순위, 마감기한, 작성일자, isFinished는 State로 변경

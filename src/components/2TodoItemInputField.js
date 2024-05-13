@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { DatePickerCSS, InputLabelCSS, SelectCSS, TextFieldCSS } from './styledSystem';
 
 // ToDoList 입력필드
 export const TodoItemInputField = (props) => {
@@ -48,29 +49,27 @@ export const TodoItemInputField = (props) => {
     return (
         <InputFieldContainer>
             <InputContainer>
-                <TextField
+                <TextFieldCSS
                     id="todo-item-input"
                     label="Todo Item"
                     onChange={(e) => setInput(e.target.value)} value={input}
                 />
-               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
+               <LocalizationProvider dateAdapter={AdapterDayjs} >
+                    <DemoContainer  sx={{ marginRight: '20px', width: '400px' }}
                         components={[
                             'DatePicker',
                         ]}
                     >
-                        <DemoItem>
                             <DatePicker
                                 label="month day, year"
                                 value={value}
                                 onChange={(newValue) => setValue(newValue)}
                             />
-                        </DemoItem>
-                    </DemoContainer>
+                    </DemoContainer>    
                 </LocalizationProvider>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Priority</InputLabel>
-                    <Select
+                    <InputLabelCSS id="demo-simple-select-label">Priority</InputLabelCSS>
+                    <SelectCSS
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={priority}
@@ -80,7 +79,7 @@ export const TodoItemInputField = (props) => {
                         <MenuItem value={10}>High</MenuItem>
                         <MenuItem value={20}>Medium</MenuItem>
                         <MenuItem value={30}>Low</MenuItem>
-                    </Select>
+                    </SelectCSS>
                 </FormControl>
             </InputContainer>
             <Button variant="outlined" onClick={onSubmit}>Submit</Button>

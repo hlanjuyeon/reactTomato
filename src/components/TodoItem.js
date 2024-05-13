@@ -11,43 +11,50 @@ import { ListItemCSS, ListItemTextCSS } from "./styledSystem";
 import { High } from "./priority/High";
 import { Low } from "./priority/Low";
 import { Medium } from "./priority/Medium";
+import axios from "axios";
 
-export const TodoItem = (props) => {
+export const TodoItem = ({
+    todoitem,
+    handlelist,
+    handledetail,
+}) => {
+    const handleDelete = () => {
+        console.log("handleDelete(id) => ", todoitem.id);
+        
+        axios
+            .post("http://localhost:3000/delete", {
+                id: todoitem.id,
+            })
+            .then(() => {
+                handlelist();
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    };
 
-    // TodoItem을 완료했을 때 css
-    const CompleteStyle = props.todoItem.isFinished ? { textDecoration: 'line-through' } : {};
-    // TodoItem의 완료 기능을 위해서 button 추가 -> 생김새를 위해 button 태그의 기본 style을 제거하는 css
-    const noneButtonStyle = { border: '0', background: 'transparent' };
-
-    /*
-        Checkbox의 checked 속성을 하는 이유?
-
-        1. 부모 button태그에 onClick 함수를 사용했기 때문에, 완료 표시는 제대로 구현됨
-        2. 다만, todoItem이 '완료 상태'가 되었더라도, checkbox에 '체크 표시'를 하는 기능은 없음
-        3. 그래서 checked 속성을 이용해 isFinished가 true라면 checked를 하도록 설정함
-    */
+    console.log("Todoitem => ", todoitem);
 
     return (
         <ListItemCSS secondaryAction={
-            <IconButton edge="end" aria-label="comments" onClick={() => props.onRemoveClick(props.todoItem)}>
+            <IconButton edge="end" aria-label="comments" onClick={handleDelete}>
                 <DeleteIcon />
             </IconButton>
         }>
-            <ButtonContainer style={noneButtonStyle} onClick={() => props.onTodoItemClick(props.todoItem)} dense>
+            <ButtonContainer >
                 <ListItemIcon>
                     <Checkbox
                         edge="start"
-                        checked={props.todoItem.isFinished}
+                        checked={true}
                         disableRipple
                     />
                 </ListItemIcon>
-                <ListItemTextCSS style={CompleteStyle} primary={props.todoItem.todoItemContent} />
+                <ListItemTextCSS primary={todoitem.content} />
             </ButtonContainer>
             <High></High>
             <Medium></Medium>
             <Low></Low>
-            <div>마감날짜</div>
+            <div>{todoitem.deadline}</div>
         </ListItemCSS>
     );
-
 }
