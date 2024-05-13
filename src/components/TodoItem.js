@@ -12,15 +12,29 @@ import { High } from "./priority/High";
 import { Low } from "./priority/Low";
 import { Medium } from "./priority/Medium";
 import axios from "axios";
+import { display } from "@mui/system";
 
 export const TodoItem = ({
     todoitem,
     handlelist,
-    handledetail,
 }) => {
+
+    const renderPriority = () => {
+        switch (todoitem.priority) {
+            case "high":
+                return <High />
+            case "medium":
+                return <Medium />
+            case "low":
+                return <Low />
+            default:
+                return null; // 기본값 추가
+        }
+    };
+
     const handleDelete = () => {
         console.log("handleDelete(id) => ", todoitem.id);
-        
+
         axios
             .post("http://localhost:3000/delete", {
                 id: todoitem.id,
@@ -51,10 +65,8 @@ export const TodoItem = ({
                 </ListItemIcon>
                 <ListItemTextCSS primary={todoitem.content} />
             </ButtonContainer>
-            <High></High>
-            <Medium></Medium>
-            <Low></Low>
+            <>{renderPriority()}</>
             <div>{todoitem.deadline}</div>
         </ListItemCSS>
     );
-}
+};

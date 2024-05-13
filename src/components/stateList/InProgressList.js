@@ -21,7 +21,6 @@ export const InProgressList = ({
                 {todoList.data && todoList.data.map((todoitem) => {
                     return (<>
                         <TodoItem
-                            key={todoitem.id}
                             actionmode={actionmode}
                             todoitem={todoitem}
                             handlelist={handlelist}

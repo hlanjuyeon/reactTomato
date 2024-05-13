@@ -18,10 +18,9 @@ export const CompleteList = ({
             <TitleComplete>Complete</TitleComplete>
             <NumComplete>{todoList.length}  (글 개수)</NumComplete>
             <UlContainer>
-                {todoList.data && todoList.data.map((todoitem) => {
+                {todoList && todoList.map((todoitem) => {
                     return (<>
                         <TodoItem
-                            key={todoitem.id}
                             actionmode={actionmode}
                             todoitem={todoitem}
                             handlelist={handlelist}

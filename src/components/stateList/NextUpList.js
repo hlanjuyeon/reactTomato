@@ -1,6 +1,6 @@
 import { NextUpBox, TitleNextUp, NumNextUp } from "./styled";
 
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodoList } from "../2todoList";
 import { TodoitemInput } from "../todoitemInput";
 import { TodoItem } from "../todoItem";
@@ -18,13 +18,12 @@ export const NextUpList = ({
 
     return (
         <NextUpBox>
-            <TitleNextUp>In Progress</TitleNextUp>
+            <TitleNextUp>Next Up</TitleNextUp>
             <NumNextUp>{todoList.length} (글 개수)</NumNextUp>
             <UlContainer>
-                {todoList.data && todoList.data.map((todoitem) => {
+                {todoList && todoList.map((todoitem) => {
                     return (<>
                         <TodoItem
-                            key={todoitem.id}
                             actionmode={actionmode}
                             todoitem={todoitem}
                             handlelist={handlelist}

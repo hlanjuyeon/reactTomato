@@ -31,12 +31,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 // sqlQuery
-app.get("/list", (req, res) => {
-    console.log("/list");
-    const sqlQuery =
-        `SELECT * FROM board`;
+// To do List : state 
+app.post("/list", (req, res) => {
 
-    db.query(sqlQuery, (err, result) => {
+    console.log("/list");
+    const state = req.body.state;
+    
+    const sqlQuery =
+        `SELECT id, country, content, deadline, priority, DATE_FORMAT(writeDate, '%W, %e %M %Y, %r') AS formattedWriteDate, DATE_FORMAT(updateDate, '%W, %e %M %Y, %r') AS formattedUpdateDate, state, isTrash FROM board
+        WHERE isTrash = 1 OR state = ?
+        ORDER BY 
+            CASE WHEN isTrash = 1 THEN 0 ELSE 1 END, 
+            updateDate DESC`;
+
+    db.query(sqlQuery, [ state ], (err, result) => {
         if (err) {
             res.status(500).send({ success: false, error: err.message });
         } else {
@@ -47,10 +55,8 @@ app.get("/list", (req, res) => {
 
 app.post("/insert", async (req, res) => {
     console.log("/insert", req.body);
-    // const { id, country, content, deadline, priority, writeDate, updateDate, state, isTrash } = req.body;
 
     const resBody = {
-        id: req.body.id,
         country: req.body.country,
         content: req.body.content,
         deadline: req.body.deadline,
@@ -61,26 +67,15 @@ app.post("/insert", async (req, res) => {
         isTrash: req.body.isTrash,
     }
 
-    // const id = req.body.id;
-    // const country = req.body.country;
-    // const content = req.body.content;
-    // const deadline = req.body.deadline;
-    // const priority = req.body.priority;
-    // const writeDate = req.body.writeDate;
-    // const updateDate = req.body.updateDate;
-    // const state = req.body.state;
-    // const isTrash = req.body.isTrash;
-
     const sqlQuery =
-        `INSERT INTO board (id, country, content, deadline, priority, writeDate, updateDate, state, isTrash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        `INSERT INTO board (country, content, deadline, priority, writeDate, updateDate, state, isTrash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    db.query(sqlQuery, [resBody.id, resBody.country, resBody.content, resBody.deadline, resBody.priority, resBody.writeDate, resBody.updateDate, resBody.state, resBody.isTrash], () => {
-        // if (err) {
-        //     res.status().send({ success: false, error: err.message });
-        // } else {
-        //     res.send({ success: true, data: result });
-        // }c
-        res.send("성공");
+    db.query(sqlQuery, [ resBody.country, resBody.content, resBody.deadline, resBody.priority, resBody.writeDate, resBody.updateDate, resBody.state, resBody.isTrash], (err, result) => {
+        if (err) {
+            res.status().send({ success: false, error: err.message });
+        } else {
+            res.send({ success: true, data: result });
+        }
     });
 });
 
@@ -90,7 +85,7 @@ app.post("/detail", (req, res) => {
     const { id } = req.body;
 
     const sqlQuery =
-        "SELECT * FROM BOARD WHERE ID = ?;";
+        "SELECT * FROM BOARD WHERE ID = ?";
 
     db.query(sqlQuery, [id], (err, result) => {
         if (err) {

@@ -4,14 +4,14 @@ import { TodoList } from '../../components/2todoList';
 
 import { Container, List } from './styled';
 
-import { Header } from '../../components/header';
+import { Header } from '../../components/header/header';
 import axios from 'axios';
 import { TodoitemInput } from '../../components/todoitemInput';
 import { NextUpList } from '../../components/stateList/NextUpList';
 import { InProgressList } from '../../components/stateList/InProgressList';
 import { CompleteList } from '../../components/stateList/CompleteList';
 import { TrashList } from '../../components/stateList/TrashList';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 export const Main = () => {
@@ -25,23 +25,44 @@ export const Main = () => {
     // 0(insert), 1(detail), 2(update)
     const [actionMode, setActionMode] = useState({ mode: 0 });
 
-    // List 조회 Function
-    const getList = async () => {
-        await axios
-            .get(`http://localhost:3700/list`) // 빈 객체 전달
-            .then((res) => {
+    const location = useLocation();
+    const country = location.state?.country;
 
-                setTodoList(
-                    res.data
-                );
+    console.log("나라이름 ->", country);
+
+    const [currentList, setCurrentList] = useState("nextup");
+
+    // List 조회  
+    const getList = async (state) => {
+        await axios
+            .post(`http://localhost:3700/list`, // URL 수정
+                {
+                    state: state
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+            .then((res) => {
+                setTodoList(res.data.data); // 서버 응답에서 data 객체 내의 data 속성을 사용
 
                 setActionMode({
-                    mode: 0, // 글쓰기
+                    mode: 1,
                 });
-            }).catch((e) => {
-                console.error(e);
             })
-    }
+            .catch((e) => {
+                console.error(e);
+            });
+    };
+
+    useEffect(() => {
+        getList(currentList);
+    }, [currentList]);
+
+    const handleListChange = (state) => {
+        setCurrentList(state);
+    };
 
     // 특정 Item 조회
     const handleDetail = async (id) => {
@@ -89,30 +110,27 @@ export const Main = () => {
         <>
             <Header />
             <Container>
-                <TodoitemInput handlelist={getList} />
+                <TodoitemInput handlelist={() => getList()} country={country} />
                 <List>
                     <NextUpList
-                        todoList={todoList}
-                        actionmode={actionMode}
-                        handlelist={getList}
-                        handledetail={handleDetail}></NextUpList>
+                        todoList={todoList.filter(item => item.state === 'nextup')}
+                        handlelist={() => getList("nextup")}
+                        onLoad={() => handleListChange('nextup')}/>
                     <InProgressList
-                        todoList={todoList}
-                        actionmode={actionMode}
-                        handlelist={getList}
-                        handledetail={handleDetail}></InProgressList>
+                        todoList={todoList.filter(item => item.state === 'inprogress')}
+                        handlelist={() => getList("inprogress")}
+                        onLoad={() => handleListChange('inprogress')} />
                     <CompleteList
-                        todoList={todoList}
-                        actionmode={actionMode}
-                        handlelist={getList}
-                        handledetail={handleDetail}></CompleteList>
+                        todoList={todoList.filter(item => item.state === 'complete')}
+                        handlelist={() => getList("complete")}
+                        onLoad={() => handleListChange('complete')} />
                     <TrashList
-                        todoList={todoList}
-                        actionmode={actionMode}
-                        handlelist={getList}
-                        handledetail={handleDetail}></TrashList>
+                        todoList={todoList.filter(item => item.state === 'trash')}
+                        handlelist={() => getList("trash")}
+                        onLoad={() => handleListChange('trash')} />
                 </List>
             </Container>
         </>
     );
-}
+};
+

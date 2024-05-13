@@ -2,7 +2,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import './App.css';
 
 import { Main } from './pages/main/main';
-import { Home } from './pages/Home/home';
+import { Home } from './pages/home/home';
 import { TodoitemInput } from './components/todoitemInput';
 
 function App() {
@@ -12,17 +12,10 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Navigate to="/home" ></Navigate>}
-        >
-        </Route>
-        {/* <Route
-          path="/country-input"
-          element={<Navigate to="/main" ></Navigate>}
-        >
-        </Route> */}
-        <Route path="/home" element={<Home />}></Route>
-        <Route path="/country-input" element={<TodoitemInput />}></Route>
-        <Route path="/main" element={<Main />}></Route>
+          element={<Navigate to="/home" />}
+        />
+        <Route path="/home" element={<Home />} />
+        <Route path="/main" element={<Main />} />
       </Routes>
     </Router>
   );
