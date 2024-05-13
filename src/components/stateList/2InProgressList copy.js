@@ -3,7 +3,6 @@ import { InProgressBox, TitleInProgress, NumComplete, NumInProgress } from "./st
 import { UlContainer } from "../styled";
 import { TodoItem } from "../todoItem";
 
-
 export const InProgressList = ({
     todoList,
     actionmode,
