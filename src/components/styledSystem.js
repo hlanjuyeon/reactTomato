@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { InputLabel, Select, TextField } from "@mui/material";
+import { Button, InputLabel, Select, TextField } from "@mui/material";
 
 export const ListItemCSS = styled(ListItem)({
   boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
@@ -34,6 +34,11 @@ export const InputLabelCSS = styled(InputLabel)({
 export const SelectCSS = styled(Select)({
   marginTop: '8px !important',
   width: '200px',
+});
+
+export const ButtonCSS = styled(Button)({
+  height: '55px',
+  marginTop: '28.5px',
 });
 
 

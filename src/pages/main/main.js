@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 
-import { TodoList } from '../../components/todoList';
+import { TodoList } from '../../components/2todoList';
 
 import { Container, List } from './styled';
 
@@ -11,6 +11,7 @@ import { NextUpList } from '../../components/stateList/NextUpList';
 import { InProgressList } from '../../components/stateList/InProgressList';
 import { CompleteList } from '../../components/stateList/CompleteList';
 import { TrashList } from '../../components/stateList/TrashList';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 export const Main = () => {

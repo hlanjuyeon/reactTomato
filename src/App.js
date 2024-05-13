@@ -3,6 +3,7 @@ import './App.css';
 
 import { Main } from './pages/main/main';
 import { Home } from './pages/Home/home';
+import { TodoitemInput } from './components/todoitemInput';
 
 function App() {
 
@@ -11,11 +12,17 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Navigate to="/main" ></Navigate>}
+          element={<Navigate to="/home" ></Navigate>}
         >
         </Route>
+        {/* <Route
+          path="/country-input"
+          element={<Navigate to="/main" ></Navigate>}
+        >
+        </Route> */}
+        <Route path="/home" element={<Home />}></Route>
+        <Route path="/country-input" element={<TodoitemInput />}></Route>
         <Route path="/main" element={<Main />}></Route>
-        <Route exactpath="/home" element={<Home />}></Route>
       </Routes>
     </Router>
   );

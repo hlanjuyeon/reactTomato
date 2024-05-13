@@ -63,7 +63,7 @@ export const NumComplete = styled.span`
     float: left;
 `;
 
-export const TrasheBox = styled.div`
+export const TrashBox = styled.div`
     width: 300px;
     height: 500px;
     border: 1px solid black;

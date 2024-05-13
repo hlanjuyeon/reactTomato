@@ -1,7 +1,7 @@
 import { NextUpBox, TitleNextUp, NumNextUp } from "./styled";
 
 import { React, useEffect, useState } from 'react';
-import { TodoList } from "../todoList";
+import { TodoList } from "../2todoList";
 import { TodoitemInput } from "../todoitemInput";
 import { TodoItem } from "../todoItem";
 import { UlContainer } from "../styled";

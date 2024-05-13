@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { InputContainer, InputFieldContainer } from "./styled";
 import MenuItem from '@mui/material/MenuItem';
@@ -7,17 +7,23 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { InputLabelCSS, SelectCSS, TextFieldCSS } from './styledSystem';
+import { ButtonCSS, InputLabelCSS, SelectCSS, TextFieldCSS } from './styledSystem';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 let todoitemId = 0;
 
 // ToDoList 입력필드
-export const TodoitemInput = ({ handlelist }) => {
+export const TodoitemInput = ({ handlelist}) => {
 
     const [content, setContent] = useState("");
     const [priority, setPriority] = useState("");
     const [deadline, setDeadline] = useState(null);
+
+    const location = useLocation();
+    const country = location.state?.country;
+
+    console.log("나라이름 ->" , country);
 
     const handleInsert = () => {
         if (content === "" || content === undefined) {
@@ -46,13 +52,13 @@ export const TodoitemInput = ({ handlelist }) => {
         axios
             .post(`http://localhost:3700/insert`, {
                 id: todoitemId++,
-                country: "japan",
+                country: country,
                 content: content,
                 deadline: deadline,
                 priority: priority,
                 writeDate: currentToday(),
                 updateDate: currentToday(),
-                state: "Trash",
+                state: "NextUp",
                 isTrash: false,
             }, {
                 headers: {
@@ -84,7 +90,7 @@ export const TodoitemInput = ({ handlelist }) => {
                     onChange={(e) => setContent(e.target.value)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs} >
-                    <DemoContainer sx={{ width: '280px' }}
+                    <DemoContainer sx={{ width: '290px' }}
                         components={[
                             'DatePicker',
                         ]}
@@ -111,7 +117,7 @@ export const TodoitemInput = ({ handlelist }) => {
                     </SelectCSS>
                 </FormControl>
             </InputContainer>
-            <Button variant="outlined" onClick={handleInsert}>CREATE</Button>
+            <ButtonCSS variant="outlined" onClick={handleInsert}>CREATE</ButtonCSS>
         </InputFieldContainer>
     );
 }

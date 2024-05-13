@@ -16,6 +16,13 @@ export const ImgUSA = styled.img`
 `;
 
 export const ImgLandmark = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
+`;
+
+export const ButtonCSS = styled.button`
+    border: none;
+    outline: none;
+    background-color: inherit ;
+    cursor: pointer;
 `;
