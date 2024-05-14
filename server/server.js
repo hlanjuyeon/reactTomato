@@ -2,6 +2,7 @@ const express = require("express"); // express를 불러옴
 const cors = require("cors"); // cors를 불러옴
 const mysql = require("mysql2"); // mysql을 불러옴
 const bodyParser = require("body-parser"); // 요청정보 처리
+const requestIp = require('request-ip');
 
 const app = express();
 const PORT = 3700; // 포트번호 설정
@@ -21,8 +22,25 @@ app.use(cors({
     optionsSuccessStatus: 200,  // 응답 상태 200으로 설정
 }));
 
+app.use(requestIp.mw()); // 미들웨어로 IP 정보 요청
+// app.set('trust proxy', true);
+
+app.get((req, res) => {
+    let ip = requestIp.getClientIp; // 클라이언트 IP를 얻습니다.
+    console.log(ip);
+    res.send(`Your IP is ${ip}`);
+    console.log(`Your IP is ${ip}`);
+});
+
+app.get('/', (req, res) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log(ip);
+    res.send(`Your IP is ${ip}`);
+    console.log(`Your IP is ${ip}`);
+});
+
 // 서버 연결 시 발생
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`server running on port ${PORT}`);
 });
 
@@ -31,20 +49,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 // sqlQuery
-// To do List : state 
+// To do List 
 app.post("/list", (req, res) => {
 
     console.log("/list");
     const state = req.body.state;
-    
+    const country = req.body.country;
+
     const sqlQuery =
-        `SELECT id, country, content, deadline, priority, DATE_FORMAT(writeDate, '%W, %e %M %Y, %r') AS formattedWriteDate, DATE_FORMAT(updateDate, '%W, %e %M %Y, %r') AS formattedUpdateDate, state, isTrash FROM board
-        WHERE isTrash = 1 OR state = ?
+        `SELECT id, country, content, deadline, priority, DATE_FORMAT(writeDate, '%W, %e %M %Y, %r') AS formattedWriteDate, DATE_FORMAT(updateDate, '%W, %e %M %Y, %r') AS formattedUpdateDate, state, isTrash, bank FROM board
+        WHERE country = ? and (isTrash = 1 OR state = ?)
         ORDER BY 
             CASE WHEN isTrash = 1 THEN 0 ELSE 1 END, 
             updateDate DESC`;
 
-    db.query(sqlQuery, [ state ], (err, result) => {
+    db.query(sqlQuery, [country, state], (err, result) => {
         if (err) {
             res.status(500).send({ success: false, error: err.message });
         } else {
@@ -52,6 +71,27 @@ app.post("/list", (req, res) => {
         }
     });
 });
+
+// get list count
+app.post("/list/count", (req, res) => {
+
+    console.log("/list/count");
+    const state = req.body.state;
+    const country = req.body.country;
+
+    const sqlQuery =
+        `SELECT count(*) FROM board
+        WHERE country = ? and (isTrash = 1 OR state = ?)`;
+
+    db.query(sqlQuery, [country, state], (err, result) => {
+        if (err) {
+            res.status(500).send({ success: false, error: err.message });
+        } else {
+            res.send({ success: true, data: result });
+        }
+    });
+});
+
 
 app.post("/insert", async (req, res) => {
     console.log("/insert", req.body);
@@ -70,7 +110,7 @@ app.post("/insert", async (req, res) => {
     const sqlQuery =
         `INSERT INTO board (country, content, deadline, priority, writeDate, updateDate, state, isTrash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    db.query(sqlQuery, [ resBody.country, resBody.content, resBody.deadline, resBody.priority, resBody.writeDate, resBody.updateDate, resBody.state, resBody.isTrash], (err, result) => {
+    db.query(sqlQuery, [resBody.country, resBody.content, resBody.deadline, resBody.priority, resBody.writeDate, resBody.updateDate, resBody.state, resBody.isTrash], (err, result) => {
         if (err) {
             res.status().send({ success: false, error: err.message });
         } else {
@@ -96,15 +136,18 @@ app.post("/detail", (req, res) => {
     });
 });
 
-app.post("/update", (req, res) => {
-    console.log("/update", req.body);
+// update state
+app.post("/update/state", (req, res) => {
+    console.log("/update/state", req.body);
 
-    const { id, updateDate, state, isTrash } = req.body.todoItem;
+    const id = req.body.todoItem.id;
+    const updateDate = req.body.todoItem.updateDate;
+    const state = req.body.todoItem.state;
 
     const sqlQuery =
-        "UPDATE BOARD SET UPDATEDATE=?, STATE=?, ISTRASH=? WHERE id=?;";
+        `UPDATE BOARD SET updateDate=?, state=?WHERE id=?`;
 
-    db.query(sqlQuery, [updateDate, state, isTrash, id], (err, result) => {
+    db.query(sqlQuery, [updateDate, state, id], (err, result) => {
         if (err) {
             res.status(500).send({ success: false, error: err.message });
         } else {
@@ -114,6 +157,28 @@ app.post("/update", (req, res) => {
     });
 });
 
+// update isTrash
+app.post("/update/trash", (req, res) => {
+    console.log("/update/trash", req.body);
+
+    const id = req.body.todoItem.id;
+    const updateDate = req.body.todoItem.updateDate;
+    const isTrash = req.body.todoItem.isTrash;
+
+    const sqlQuery =
+        `UPDATE BOARD SET updateDate=?, isTrash=? WHERE id=?`;
+
+    db.query(sqlQuery, [updateDate, isTrash, id], (err, result) => {
+        if (err) {
+            res.status(500).send({ success: false, error: err.message });
+        } else {
+            res.send({ success: true, data: result });
+            console.log("result=", result);
+        }
+    });
+});
+
+// delete (after 30days)
 app.post("/delete", (req, res) => {
     const { id } = req.body;
     console.log("/delete(id) => ", id);

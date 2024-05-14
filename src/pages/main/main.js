@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 
 import { TodoList } from '../../components/2todoList';
 
-import { Container, List } from './styled';
+import { Container, List, StyledContainer } from './styled';
 
 import { Header } from '../../components/header/header';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import { InProgressList } from '../../components/stateList/InProgressList';
 import { CompleteList } from '../../components/stateList/CompleteList';
 import { TrashList } from '../../components/stateList/TrashList';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
+import { ApiBackground } from '../../apiBackground';
 
 export const Main = () => {
 
@@ -30,13 +30,16 @@ export const Main = () => {
 
     console.log("나라이름 ->", country);
 
-    const [currentList, setCurrentList] = useState("nextup");
+    const [currentList, setCurrentList] = useState({ country, state: "nextup" });
+
+    const [background, setBackground] = useState(null);
 
     // List 조회  
-    const getList = async (state) => {
+    const getList = async (country, state) => {
         await axios
             .post(`http://localhost:3700/list`, // URL 수정
                 {
+                    country: country,
                     state: state
                 },
                 {
@@ -45,7 +48,8 @@ export const Main = () => {
                     }
                 })
             .then((res) => {
-                setTodoList(res.data.data); // 서버 응답에서 data 객체 내의 data 속성을 사용
+                const filteredList = res.data.data.filter(item => item.country === country);
+                setTodoList(filteredList);
 
                 setActionMode({
                     mode: 1,
@@ -56,12 +60,48 @@ export const Main = () => {
             });
     };
 
+    // get Count
+    const getCount = async (country, state) => {
+        await axios
+            .post(`http://localhost:3700/list/count`, 
+                {
+                    country: country,
+                    state: state
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+            .then((res) => {
+                const count = res.data.data[0]['count(*)'];
+                console.log("항목 수: ", count);
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    };
+
     useEffect(() => {
-        getList(currentList);
+        const getBackground = async () => {
+            const images = await ApiBackground(country);
+            setBackground(images);
+        };
+
+        if (country) {
+            getBackground();
+        }
+    }, [country]);
+
+    console.log("화면 나옵?" ,background);
+
+    useEffect(() => {
+        getList(currentList.country, currentList.state);
+        getCount(currentList.country, currentList.state);
     }, [currentList]);
 
-    const handleListChange = (state) => {
-        setCurrentList(state);
+    const handleListChange = (country, state) => {
+        setCurrentList({country, state});
     };
 
     // 특정 Item 조회
@@ -85,51 +125,37 @@ export const Main = () => {
                 console.error(e);
             })
     }
-
-    // 특정 Item Update
-    const handleUpdate = () => {
-        console.log("handleUpdate => ", todoItem);
-
-        axios
-            .post("http://localhost:3700/update", {
-                todoitem: todoItem,
-            })
-            /* 그냥 예시임
-            .then((res) =? {
-                console.log("handleUpdate(changedRows) =>", res.data.changedRows)
-            }) */
-            .then(() => {
-                getList();
-            })
-            .catch((e) => {
-                console.error(e);
-            });
-    };
-
+    
     return (
         <>
-            <Header />
-            <Container>
-                <TodoitemInput handlelist={() => getList()} country={country} />
-                <List>
-                    <NextUpList
-                        todoList={todoList.filter(item => item.state === 'nextup')}
-                        handlelist={() => getList("nextup")}
-                        onLoad={() => handleListChange('nextup')}/>
-                    <InProgressList
-                        todoList={todoList.filter(item => item.state === 'inprogress')}
-                        handlelist={() => getList("inprogress")}
-                        onLoad={() => handleListChange('inprogress')} />
-                    <CompleteList
-                        todoList={todoList.filter(item => item.state === 'complete')}
-                        handlelist={() => getList("complete")}
-                        onLoad={() => handleListChange('complete')} />
-                    <TrashList
-                        todoList={todoList.filter(item => item.state === 'trash')}
-                        handlelist={() => getList("trash")}
-                        onLoad={() => handleListChange('trash')} />
-                </List>
-            </Container>
+            <StyledContainer background={background}>
+                <Header />
+                <Container>
+                    <TodoitemInput handlelist={() => getList()} country={country} />
+                    <List>  
+                        <NextUpList
+                            todoList={todoList.filter(item => item.state === 'nextup')}
+                            handlelist={() => getList(country, "nextup")}
+                            onLoad={() => handleListChange(country, 'nextup')} 
+                            handlecount={() => getCount(country, "nextup")}/>
+                        <InProgressList
+                            todoList={todoList.filter(item => item.state === 'inprogress')}
+                            handlelist={() => getList(country, "inprogress")}
+                            onLoad={() => handleListChange(country, 'inprogress')} 
+                            handlecount={() => getCount(country, "nextup")}/>
+                        <CompleteList
+                            todoList={todoList.filter(item => item.state === 'complete')}
+                            handlelist={() => getList(country, "complete")}
+                            onLoad={() => handleListChange(country, 'complete')} 
+                            handlecount={() => getCount(country, "nextup")}/>
+                        <TrashList
+                            todoList={todoList.filter(item => item.state === 'trash')}
+                            handlelist={() => getList(country, "trash")}
+                            onLoad={() => handleListChange(country, 'trash')} 
+                            handlecount={() => getCount(country, "nextup")}/>
+                    </List>
+                </Container>
+            </StyledContainer>
         </>
     );
 };

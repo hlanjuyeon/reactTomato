@@ -1,22 +1,31 @@
-import React, { useEffect } from "react";
-import { CompleteBox, TitleComplete, NumComplete } from "./styled";
+import React, { useEffect, useState } from "react";
+import { CompleteBox, TitleComplete, NumComplete, HeadComplete } from "./styled";
 import { UlContainer } from "../styled";
 import { TodoItem } from "../todoItem";
+import { FinishBtn } from "../state/finishBtn";
 
 export const CompleteList = ({
     todoList,
     actionmode,
     handlelist,
-    handledetail,
+    handlecount,
+    handledetail
 }) => {
+    const [count, setCount] = useState(0);
+
     useEffect(() => {
-        handlelist();
-    }, []);
+        // todoList의 길이를 count에 할당합니다.
+        setCount(todoList.length);
+    }, [todoList]);
+
+    console.log("개수", count); // todoList.length 대신 count를 출력합니다.
 
     return (
         <CompleteBox>
-            <TitleComplete>Complete</TitleComplete>
-            <NumComplete>{todoList.length}  (글 개수)</NumComplete>
+            <HeadComplete>
+                <TitleComplete>Complete</TitleComplete>
+                <NumComplete>{count}</NumComplete>
+            </HeadComplete>
             <UlContainer>
                 {todoList && todoList.map((todoitem) => {
                     return (<>

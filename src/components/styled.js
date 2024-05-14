@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
     background-color: purple;
-    height: 50px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,8 +41,8 @@ export const ButtonContainer = styled.button`
     margin-right: 20px;
     display: flex;
     flex-direction: row;
-    justifyContent: 'center',
-    textAlign: 'center',
+    justify-content: 'center';
+    text-align: 'center';
 `;
 
 export const TitleContainer = styled.span`
@@ -55,5 +55,22 @@ export const TitleContainer = styled.span`
 export const InputFieldContainer = styled.div`
     display: flex;
     justify-content: center;
+`;
+
+export const DeadLineCSS = styled.div`
+    margin-top: 20px;
+    width: 50%;
+`;
+
+export const StateBtn = styled.div`
+    display: flex;
+    justify-content: flex-end; // 이 부분을 수정했습니다
+    width: 100%; // 부모 컨테이너의 전체 폭을 차지하도록 설정
+`;
+
+export const BottomList = styled.div`
+    display: flex;
+    align-items: baseline;
+    width: 100%;
 `;
 

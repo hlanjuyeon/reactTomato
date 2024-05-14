@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
+
 import { InputContainer, InputFieldContainer } from "./styled";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -57,12 +57,13 @@ export const TodoitemInput = ({ handlelist }) => {
         // 사용 예:
         const today = new Date();
         const formattedDate = formatDate(today);
+        const formattedDeadline = formatDate(deadline);
 
         axios
             .post(`http://localhost:3700/insert`, {
                 country: country,
                 content: content,
-                deadline: deadline,
+                deadline: formattedDeadline,
                 priority: priority,
                 writeDate: formattedDate,
                 updateDate: formattedDate,

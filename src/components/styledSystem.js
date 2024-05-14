@@ -11,6 +11,9 @@ export const ListItemCSS = styled(ListItem)({
   alignItems: 'flex-start',
   marginBottom: '10px',
   padding: '10px',
+  marginTop: '20px',
+  background: 'white',
+  borderRadius: '5px'
 });
 
 export const ListItemTextCSS = styled(ListItemText)(({ theme }) => ({

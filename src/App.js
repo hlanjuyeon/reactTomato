@@ -3,7 +3,6 @@ import './App.css';
 
 import { Main } from './pages/main/main';
 import { Home } from './pages/home/home';
-import { TodoitemInput } from './components/todoitemInput';
 
 function App() {
 

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { TrasheBox, TitleTrash, NumTrash, TrashBox } from "./styled";
+import React, { useEffect, useState } from "react";
+import { TrasheBox, TitleTrash, NumTrash, TrashBox, HeadTrash } from "./styled";
 import { UlContainer } from "../styled";
 import { TodoItem } from "../todoItem";
 
@@ -7,21 +7,28 @@ export const TrashList = ({
     todoList,
     actionmode,
     handlelist,
-    handledetail,
+    handlecount,
+    handledetail
 }) => {
+    const [count, setCount] = useState(0);
+
     useEffect(() => {
-        handlelist();
-    }, []);
+        // todoList의 길이를 count에 할당합니다.
+        setCount(todoList.length);
+    }, [todoList]);
+
+    console.log("개수", count); // todoList.length 대신 count를 출력합니다.
 
     return (
         <TrashBox>
-            <TitleTrash>Trash</TitleTrash>
-            <NumTrash>{todoList.length}  (글 개수)</NumTrash>
+            <HeadTrash>
+                <TitleTrash>Trash</TitleTrash>
+                <NumTrash>{count}</NumTrash>
+            </HeadTrash>
             <UlContainer>
-                {todoList.data && todoList.data.map((todoitem) => {
+                {todoList && todoList.map((todoitem) => {
                     return (<>
                         <TodoItem
-                            key={todoitem.id}
                             actionmode={actionmode}
                             todoitem={todoitem}
                             handlelist={handlelist}
