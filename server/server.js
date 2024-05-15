@@ -25,18 +25,11 @@ app.use(cors({
 app.use(requestIp.mw()); // 미들웨어로 IP 정보 요청
 // app.set('trust proxy', true);
 
-app.get((req, res) => {
-    let ip = requestIp.getClientIp; // 클라이언트 IP를 얻습니다.
-    console.log(ip);
-    res.send(`Your IP is ${ip}`);
-    console.log(`Your IP is ${ip}`);
-});
-
 app.get('/', (req, res) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(ip);
     res.send(`Your IP is ${ip}`);
-    console.log(`Your IP is ${ip}`);
+    console.log(`Your is ${ip}`);
 });
 
 // 서버 연결 시 발생
@@ -140,12 +133,12 @@ app.post("/detail", (req, res) => {
 app.post("/update/state", (req, res) => {
     console.log("/update/state", req.body);
 
-    const id = req.body.todoItem.id;
-    const updateDate = req.body.todoItem.updateDate;
-    const state = req.body.todoItem.state;
+    const id = req.body.id;
+    const updateDate = req.body.updateDate;
+    const state = req.body.state;
 
     const sqlQuery =
-        `UPDATE BOARD SET updateDate=?, state=?WHERE id=?`;
+        `UPDATE BOARD SET updateDate=?, state=? WHERE id=?`;
 
     db.query(sqlQuery, [updateDate, state, id], (err, result) => {
         if (err) {
@@ -161,9 +154,9 @@ app.post("/update/state", (req, res) => {
 app.post("/update/trash", (req, res) => {
     console.log("/update/trash", req.body);
 
-    const id = req.body.todoItem.id;
-    const updateDate = req.body.todoItem.updateDate;
-    const isTrash = req.body.todoItem.isTrash;
+    const id = req.body.id;
+    const updateDate = req.body.updateDate;
+    const isTrash = req.body.isTrash;
 
     const sqlQuery =
         `UPDATE BOARD SET updateDate=?, isTrash=? WHERE id=?`;

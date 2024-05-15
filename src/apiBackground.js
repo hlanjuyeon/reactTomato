@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const ApiBackground = async (country) => {
     const apiKey = '43867327-9be70654755e23226530c0d0d';
-    const url = `https://pixabay.com/api/?key=${apiKey}&category=places&image_type=photo&q=${country}+traditional`;
+    const url = `https://pixabay.com/api/?key=${apiKey}&category=places&image_type=photo&q=${country}+landmark`;
 
     try {
         const response = await axios.get(url);

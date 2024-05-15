@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, InputLabel, Select, TextField } from "@mui/material";
+import { isLabelWithInternallyDisabledControl } from "@testing-library/user-event/dist/utils";
 
 export const ListItemCSS = styled(ListItem)({
   boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
@@ -28,10 +29,17 @@ export const TextFieldCSS = styled(TextField)({
   marginRight: '20px',
   marginTop: '8px',
   width: '600px',
+  color: 'white !important',
+
+  '& .label' : {
+    color: 'white !important',
+  }
+
 }); 
 
 export const InputLabelCSS = styled(InputLabel)({
-  marginTop: '8px !important'
+  marginTop: '8px !important',
+  color: 'white !important'
 });
 
 export const SelectCSS = styled(Select)({

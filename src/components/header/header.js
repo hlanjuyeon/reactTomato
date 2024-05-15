@@ -13,8 +13,8 @@ export const Header = () => {    const [background, setBackground] = useState(nu
 
     return (
         <HeaderContainer>
-            <BigTitle>Victory's Blueprint</BigTitle>
-            <SmallTitle>Your Daily Missions</SmallTitle>
+            <BigTitle>To Do List</BigTitle>
+            <SmallTitle>Victory's Blueprint : Your Daily Missions</SmallTitle>
 
         </HeaderContainer>
     );

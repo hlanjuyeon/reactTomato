@@ -5,17 +5,26 @@ import { TodoItem } from "../todoItem";
 
 export const TrashList = ({
     todoList,
-    actionmode,
     handlelist,
     handlecount,
-    handledetail
+    handlestate,
+    handletrash,
+    country
 }) => {
     const [count, setCount] = useState(0);
+    const [currentList, setCurrentList] = useState({ country, state: "" });
+
+    const handleListChange = (country, state) => {
+        console.log("List = handleListChange -" , country, state);
+        setCurrentList({ country, state });
+    };
 
     useEffect(() => {
+        handleListChange(country, 'trash');
+        handlelist();
         // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);
-    }, [todoList]);
+    }, []);
 
     console.log("개수", count); // todoList.length 대신 count를 출력합니다.
 
@@ -29,10 +38,10 @@ export const TrashList = ({
                 {todoList && todoList.map((todoitem) => {
                     return (<>
                         <TodoItem
-                            actionmode={actionmode}
                             todoitem={todoitem}
                             handlelist={handlelist}
-                            handledetail={handledetail}
+                            handletrash={handletrash}
+                            handlestate={handlestate}
                         /></>
                     );
                 })}
