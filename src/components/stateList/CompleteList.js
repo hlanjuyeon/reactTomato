@@ -6,14 +6,13 @@ import { FinishBtn } from "../state/finishBtn";
 
 export const CompleteList = ({
     todoList,
-    handlelist,
-    handlecount,
-    handlestate,
-    handletrash,
+    // handleList,
+    handleState,
+    handleTrash,
     country
 }) => {
     const [count, setCount] = useState(0);
-    const [currentList, setCurrentList] = useState({ country, state: "" });
+    const [currentList, setCurrentList] = useState({ country, state: "complete" });
 
     const handleListChange = (country, state) => {
         console.log("List = handleListChange -" , country, state);
@@ -22,7 +21,7 @@ export const CompleteList = ({
 
     useEffect(() => {
         handleListChange(country, 'complete');
-        handlelist();
+        // handleList();
         // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);
     }, []);
@@ -40,9 +39,9 @@ export const CompleteList = ({
                     return (<>
                         <TodoItem
                             todoitem={todoitem}
-                            handlelist={handlelist}
-                            handletrash={handletrash}
-                            handlestate={handlestate}
+                            // handleList={handleList}
+                            handleTrash={handleTrash}
+                            handleState={handleState}
                         /></>
                     );
                 })}

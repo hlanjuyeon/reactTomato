@@ -5,14 +5,13 @@ import { TodoItem } from "../todoItem";
 
 export const TrashList = ({
     todoList,
-    handlelist,
-    handlecount,
-    handlestate,
-    handletrash,
-    country
+    // handleList,
+    handleState,
+    handleTrash,
+    country,
 }) => {
     const [count, setCount] = useState(0);
-    const [currentList, setCurrentList] = useState({ country, state: "" });
+    const [currentList, setCurrentList] = useState({ country, state: "trash" });
 
     const handleListChange = (country, state) => {
         console.log("List = handleListChange -" , country, state);
@@ -21,7 +20,7 @@ export const TrashList = ({
 
     useEffect(() => {
         handleListChange(country, 'trash');
-        handlelist();
+        // handleList();
         // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);
     }, []);
@@ -39,9 +38,9 @@ export const TrashList = ({
                     return (<>
                         <TodoItem
                             todoitem={todoitem}
-                            handlelist={handlelist}
-                            handletrash={handletrash}
-                            handlestate={handlestate}
+                            // handleList={handleList}
+                            handleTrash={handleTrash}
+                            handleState={handleState}
                         /></>
                     );
                 })}

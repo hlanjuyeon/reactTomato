@@ -10,11 +10,10 @@ import { useLocation } from "react-router-dom";
 
 export const NextUpList = ({
     todoList,
-    handlelist,
-    handlecount,
-    handlestate,
-    handletrash,
-    country
+    // handleList,
+    handleState,
+    handleTrash,
+    country,
 }) => {
     // const [count, setCount] = useState(0);
     // const [currentList, setCurrentList] = useState({ country, state: "" });
@@ -23,14 +22,14 @@ export const NextUpList = ({
     const [currentList, setCurrentList] = useState({ country, state: "nextup" });
 
     const handleListChange = (country, state) => {
-        console.log("List = handleListChange -" , country, state);
+        console.log("List = handleListChange -", country, state);
         setCurrentList({ country, state });
     };
 
     useEffect(() => {
         // 첫 마운트에서만 handleListChange와 handlelist 함수를 호출합니다.
         handleListChange(country, 'nextup');
-        handlelist();
+        // handleList();
 
         // todoList의 변화를 감지하여 count를 업데이트합니다.
         setCount(todoList.length);
@@ -49,9 +48,9 @@ export const NextUpList = ({
                     return (<>
                         <TodoItem
                             todoitem={todoitem}
-                            handlelist={handlelist}
-                            handletrash={handletrash}
-                            handlestate={handlestate}
+                            // handleList={handleList}
+                            handleTrash={handleTrash}
+                            handleState={handleState}
                         /></>
                     );
                 })}

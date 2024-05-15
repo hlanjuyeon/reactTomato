@@ -5,11 +5,10 @@ import { TodoItem } from "../todoItem";
 
 export const InProgressList = ({
     todoList,
-    handlelist,
-    handlecount,
-    handlestate,
-    handletrash,
-    country
+    // handleList,
+    handleState,
+    handleTrash,
+    country,
 }) => {
     // const [count, setCount] = useState(0);
     // const [currentList, setCurrentList] = useState({ country, state: "" });
@@ -25,7 +24,7 @@ export const InProgressList = ({
     useEffect(() => {
         // 첫 마운트에서만 handleListChange와 handlelist 함수를 호출합니다.
         handleListChange(country, 'inprogress');
-        handlelist();
+        // handleList();
 
         // todoList의 변화를 감지하여 count를 업데이트합니다.
         setCount(todoList.length);
@@ -44,9 +43,9 @@ export const InProgressList = ({
                     return (<>
                         <TodoItem
                             todoitem={todoitem}
-                            handlelist={handlelist}
-                            handletrash={handletrash}
-                            handlestate={handlestate}
+                            // handleList={handleList}
+                            handleTrash={handleTrash}
+                            handleState={handleState}
                         /></>
                     );
                 })}

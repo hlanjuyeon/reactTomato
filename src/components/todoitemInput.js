@@ -11,77 +11,47 @@ import { ButtonCSS, InputLabelCSS, SelectCSS, TextFieldCSS } from './styledSyste
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
-let todoitemId = 0;
-
 // ToDoList 입력필드
-export const TodoitemInput = ({ handlelist }) => {
+// export const TodoitemInput = ({ handlelist }) => {
+export const TodoitemInput = (props) => {
 
     const [content, setContent] = useState("");
     const [priority, setPriority] = useState("");
     const [deadline, setDeadline] = useState(null);
 
-    const location = useLocation();
-    const country = location.state?.country;
-
-    const handleInsert = () => {
-        if (content === "" || content === undefined) {
-            alert("Input To do Item !!!");
-            return false;
-        }
-        if (deadline === "" || deadline === undefined) {
-            alert("Input deadline !!!");
-            return false;
-        }
-        if (priority === "" || priority === undefined) {
-            alert("Input priority !!!");
-            return false;
-        }
-
-        // const currentToday = () => {
-        //     const today = new Date();
-        //     const formattedDate = `${today.getFullYear()}/ ${today.getMonth() + 1}/ ${today.getDate()}/`;
-        //     const hours = String(today.getHours()).padStart(2, "0");
-        //     const minutes = String(today.getMinutes()).padStart(2, "0");
-        //     const seconds = String(today.getSeconds()).padStart(2, "0");
-        //     const formattedTime = `${hours}:${minutes}:${seconds}`;
-        //     return formattedDate + " " + formattedTime;
-        // }
-
-        const formatDate = (date) => {
-            // Intl.DateTimeFormat을 사용하여 날짜 형식을 설정합니다. 'en-US' 로케일을 사용하여 미국식 날짜 형식으로 설정합니다.
-            // 옵션으로는 year, month, day를 사용하여 "June 2, 2024"와 같은 형식으로 날짜를 표시합니다.
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Intl.DateTimeFormat('en-US', options).format(date);
-        }
-        
-        // 사용 예:
-        const today = new Date();
-        const formattedDate = formatDate(today);
-        const formattedDeadline = formatDate(deadline);
-
-        axios
-            .post(`http://localhost:3700/insert`, {
-                country: country,
-                content: content,
-                deadline: formattedDeadline,
-                priority: priority,
-                writeDate: formattedDate,
-                updateDate: formattedDate,
-                state: "nextup",
-                isTrash: false,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(() => { // 'country' 대신 'response'를 사용합니다.
-                handlelist(); // 'country' 대신 'response.data'를 사용합니다.
-                setContent("");
-                setDeadline(null);
-                setPriority("");
-            }).catch((e) => {
-                console.error(e);
-            });
+    const formatDate = (date) => {
+        // Intl.DateTimeFormat을 사용하여 날짜 형식을 설정합니다. 'en-US' 로케일을 사용하여 미국식 날짜 형식으로 설정합니다.
+        // 옵션으로는 year, month, day를 사용하여 "June 2, 2024"와 같은 형식으로 날짜를 표시합니다.
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    }
+    
+    const handleChangeContent = (value) => {
+        console.log("handleChangeContent 호출됨", value); // 디버깅 메시지 추가
+        setContent(value);
     };
+
+    const handleChangeDeadline = (value) => {
+        console.log("handleChangeDeadline 호출됨", value); // 디버깅 메시지 추가
+        setDeadline(value);
+    }
+
+    const handleChangePriority = (value) => {
+        console.log("handleChangePriority 호출됨", value); // 디버깅 메시지 추가
+        setPriority(value);
+    };
+
+    const handleCreate = () => {
+        console.log("handleCreate 호출됨"); // 함수 호출 확인
+        console.log("전달될 값:", {content, priority, deadline: formatDate(deadline)}); // 전달될 값 확인
+        // 직접 props에서 값을 사용하여 createItem 호출
+        props.createItem({
+            content: content,
+            priority: priority,
+            deadline: formatDate(deadline) // 날짜 포매팅 함수를 props로 전달받아 사용
+        });
+    };
+    
 
     /*
         OnChange 기능
@@ -96,7 +66,7 @@ export const TodoitemInput = ({ handlelist }) => {
                     id="todo-item-input"
                     label="Input To do Item"
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => handleChangeContent(e.target.value)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs} >
                     <DemoContainer sx={{ width: '290px' }}
@@ -107,7 +77,7 @@ export const TodoitemInput = ({ handlelist }) => {
                         <DatePicker
                             label="Deadline"
                             value={deadline}
-                            onChange={(newValue) => setDeadline(newValue)}
+                            onChange={(newValue) => handleChangeDeadline(newValue)}
                             inputFormat="YYYY/MM/DD"
                         />
                     </DemoContainer>
@@ -119,7 +89,7 @@ export const TodoitemInput = ({ handlelist }) => {
                         id="demo-simple-select"
                         label="Priority"
                         value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
+                        onChange={(e) => handleChangePriority(e.target.value)}
                     >
                         <MenuItem value="high">High</MenuItem>
                         <MenuItem value="medium">Medium</MenuItem>
@@ -127,7 +97,7 @@ export const TodoitemInput = ({ handlelist }) => {
                     </SelectCSS>
                 </FormControl>
             </InputContainer>
-            <ButtonCSS variant="outlined" onClick={handleInsert}>CREATE</ButtonCSS>
+            <ButtonCSS variant="outlined" onClick={handleCreate}>CREATE</ButtonCSS>
         </InputFieldContainer>
     );
-}
+};

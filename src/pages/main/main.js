@@ -16,20 +16,22 @@ import { ApiBackground } from '../../apiBackground';
 
 export const Main = (props) => {
 
+    const location = useLocation();
+    const country = location.state?.country;
+
     // List 저장
     const [todolist, setTodoList] = useState([]);
 
     // Item 조회
     const [todoitem, setTodoitem] = useState({});
 
-    const location = useLocation();
-    const country = location.state?.country;
+    const [background, setBackground] = useState(null);
 
-    console.log("나라이름 ->", country);
+    const [content, setContent] = useState("");
+    const [priority, setPriority] = useState("");
+    const [deadline, setDeadline] = useState(null);
 
     const [currentList, setCurrentList] = useState({ country, state: "" });
-
-    const [background, setBackground] = useState(null);
 
     useEffect(() => {
 
@@ -42,20 +44,58 @@ export const Main = (props) => {
 
         if (country) {
             getBackground();
+
+            // getList(currentList.country, currentList.state);
+            getCount(currentList.country, currentList.state);
+
+            const fetchList = async (country, state) => {
+                try {
+                    const response = await axios.post(`http://localhost:3700/list`, { country: country, state: state }, { headers: { "Content-Type": "application/json", } });
+                    console.log("fetchList response:", response); // 응답 로그 추가
+                    return response.data.data;
+                } catch (error) {
+                    console.error(`Error fetching ${state}: ${country}:`, error.response || error); // 오류 응답 로그 추가
+                    return []; // 오류가 발생한 경우 빈 배열 반환
+                }
+            };
+
+            const getListAll = async () => {
+                try {
+                    const responses = await Promise.all([
+                        fetchList("france", "nextup"),
+                        fetchList("france", "inprogress"),
+                        fetchList("france", "complete"),
+                        fetchList("france", "trash"),
+                    ]);
+
+                    const combinedList = responses.flatMap(res => res);
+                    setTodoList(combinedList);
+                } catch (error) {
+                    console.error("Overall error in fetching lists:", error);
+                }
+            };
+
+            getListAll();
+
         }
 
-    // }, [country]); // currentList가 변경될 때마다 이 useEffect가 다시 실행됩니다.
-
-
-        getList(currentList.country, currentList.state);
-        getCount(currentList.country, currentList.state);
-
-    }, [country, currentList]); // currentList가 변경될 때마다 이 useEffect가 다시 실행됩니다.
+    }, [country, currentList]); // country가 변경될 때마다 데이터를 다시 불러옵니다.
 
     const handleListChange = (country, state) => {
-        console.log("handleListChange -" , country, state);
+        console.log("handleListChange -", country, state);
         setCurrentList({ country, state });
     };
+
+    const formatDate = (date) => {
+        // Intl.DateTimeFormat을 사용하여 날짜 형식을 설정합니다. 'en-US' 로케일을 사용하여 미국식 날짜 형식으로 설정합니다.
+        // 옵션으로는 year, month, day를 사용하여 "June 2, 2024"와 같은 형식으로 날짜를 표시합니다.
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    }
+
+    // 사용 예:
+    const today = new Date();
+    const formattedDate = formatDate(today);
 
     // List 조회  
     const getList = async (country, state) => {
@@ -103,16 +143,48 @@ export const Main = (props) => {
             });
     };
 
-    const formatDate = (date) => {
-        // Intl.DateTimeFormat을 사용하여 날짜 형식을 설정합니다. 'en-US' 로케일을 사용하여 미국식 날짜 형식으로 설정합니다.
-        // 옵션으로는 year, month, day를 사용하여 "June 2, 2024"와 같은 형식으로 날짜를 표시합니다.
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
-    }
+    // Create Item
+    const createItem = async (item) => {
+        const { content, priority, deadline } = item;
 
-    // 사용 예:
-    const today = new Date();
-    const formattedDate = formatDate(today);
+        if (!content) {
+            alert("Input To do Item !!!");
+            return false;
+        }
+        if (!priority) {
+            alert("Input priority !!!");
+            return false;
+        }
+        if (!deadline) {
+            alert("Input deadline !!!");
+            return false;
+        }
+
+        await axios
+            .post(`http://localhost:3700/insert`, {
+                country: country,
+                content: content,
+                deadline: deadline,
+                priority: priority,
+                writeDate: formattedDate,
+                updateDate: formattedDate,
+                state: "nextup",
+                isTrash: false,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                setContent("");
+                setDeadline(null);
+                setPriority("");
+                handleListChange(country, "nextup");
+            }).catch((e) => {
+                console.error(e);
+            });
+
+    };
+
 
     // update State
     const handleUpdateState = (id, todoitemState, country) => {
@@ -144,9 +216,10 @@ export const Main = (props) => {
                 id: id,
                 updateDate: formattedDate, // 수정됨
                 isTrash: true, // 수정됨
+                state: "trash", // 수정됨
             })
             .then(() => {
-                handleListChange(country, "trash"); // 가정: 휴지통으로 이동한 항목이 있을 때, "nextup" 목록 새로고침
+                handleListChange(country, "trash");
             })
             .catch((e) => {
                 console.error(e);
@@ -158,38 +231,43 @@ export const Main = (props) => {
             <StyledContainer background={background}>
                 <Header />
                 <Container>
-                    <TodoitemInput country={country} />
+                    <TodoitemInput
+                        createItem={createItem}
+                        setContent={setContent}
+                        setDeadline={setDeadline}
+                        setPriority={setPriority}
+                        country={country} />
                     <List>
                         <NextUpList
                             todoList={todolist.filter(item => item.state === 'nextup')}
-                            handlelist={() => getList(country, "nextup")}
-                            handlecount={() => getCount(country, 'nextup')}
-                            handletrash={(id) => handleUpdateTrash(id, country)} // 수정됨
-                            handlestate={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
+                            // handlelist={() => getList(country, "nextup")}
+                            handleCount={() => getCount(country, 'nextup')}
+                            handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleState={(id, todoitemState) => handleUpdateState(id, todoitemState)} // 수정됨
                             country={country}
                         />
                         <InProgressList
                             todoList={todolist.filter(item => item.state == 'inprogress')}
-                            handlelist={() => getList(country, "inprogress")}
-                            handlecount={() => getCount(country, "inprogress")}
-                            handletrash={(id) => handleUpdateTrash(id, country)} // 수정됨
-                            handlestate={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
+                            // handlelist={() => getList(country, "inprogress")}
+                            handleCount={() => getCount(country, "inprogress")}
+                            handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />
                         <CompleteList
                             todoList={todolist.filter(item => item.state == 'complete')}
-                            handlelist={() => getList(country, "complete")}
-                            handlecount={() => getCount(country, "complete")}
-                            handletrash={(id) => handleUpdateTrash(id, country)} // 수정됨
-                            handlestate={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
+                            // handlelist={() => getList(country, "complete")}
+                            handleCount={() => getCount(country, "complete")}
+                            handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />
                         <TrashList
                             todoList={todolist.filter(item => item.state == 'trash')}
-                            handlelist={() => getList(country, "trash")}
-                            handlecount={() => getCount(country, "trash")}
-                            handletrash={(id) => handleUpdateTrash(id, country)} // 수정됨
-                            handlestate={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
+                            // handlelist={() => getList(country, "trash")}
+                            handleCount={() => getCount(country, "trash")}
+                            handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />
                     </List>

@@ -18,9 +18,9 @@ import { FinishBtn } from "./state/finishBtn";
 
 export const TodoItem = ({
     todoitem,
-    handlelist,
-    handlestate,
-    handletrash
+    handleList,
+    handleState,
+    handleTrash
 }) => {
     const renderPriority = () => {
         switch (todoitem.priority) {
@@ -47,7 +47,7 @@ export const TodoItem = ({
     };
 
     useEffect(() => {
-        handlelist();
+        // handleList();
     }, []);
 
     // const handleDelete = (id) => {
@@ -66,7 +66,7 @@ export const TodoItem = ({
 
     return (
         <ListItemCSS secondaryAction={
-            <IconButton edge="end" aria-label="comments" onClick={() => handletrash(todoitem.id)}>
+            <IconButton edge="end" aria-label="comments" onClick={() => handleTrash(todoitem.id)}>
                 <DeleteIcon />
             </IconButton>
         }>
@@ -84,7 +84,7 @@ export const TodoItem = ({
             <BottomList>
                 <DeadLineCSS>{todoitem.deadline}</DeadLineCSS>
                 <StateBtn
-                    onClick={() => handlestate(todoitem.id, todoitem.state)}
+                    onClick={() => handleState(todoitem.id, todoitem.state)}
                 >{renderStateBtn()}</StateBtn>
             </BottomList>
         </ListItemCSS>
