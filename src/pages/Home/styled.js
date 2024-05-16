@@ -1,5 +1,6 @@
-import styled from "styled-components";
 import worldMap from "../home/worldMap.jpg"; // src 폴더 내의 Home 폴더로부터 이미지를 불러옵니다.
+
+import styled, { keyframes } from 'styled-components';
 
 export const BackGround = styled.div`
     background: url(${worldMap}) no-repeat center fixed;  

@@ -69,7 +69,7 @@ export const TodoitemInput = (props) => {
                     onChange={(e) => handleChangeContent(e.target.value)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs} >
-                    <DemoContainer sx={{ width: '290px' }}
+                    <DemoContainer
                         components={[
                             'DatePicker',
                         ]}
@@ -82,7 +82,7 @@ export const TodoitemInput = (props) => {
                         />
                     </DemoContainer>
                 </LocalizationProvider>
-                <FormControl sx={{ marginRight: '20px' }}>
+                <FormControl sx={{ marginRight: '20px', marginLeft: '20px'}}>
                     <InputLabelCSS id="demo-simple-select-label">Priority</InputLabelCSS>
                     <SelectCSS
                         labelId="demo-simple-select-label"

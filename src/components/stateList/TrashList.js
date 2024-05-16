@@ -11,15 +11,15 @@ export const TrashList = ({
     country,
 }) => {
     const [count, setCount] = useState(0);
-    const [currentList, setCurrentList] = useState({ country, state: "trash" });
+    const [currentIsTrash, setCurrentIsTrash] = useState({ country, isTrash: 1 });
 
-    const handleListChange = (country, state) => {
-        console.log("List = handleListChange -" , country, state);
-        setCurrentList({ country, state });
+    const handleIsTrashChange = (country, isTrash) => {
+        console.log("handleIsTrashChange -", country, isTrash);
+        setCurrentIsTrash({ country, isTrash });
     };
 
     useEffect(() => {
-        handleListChange(country, 'trash');
+        handleIsTrashChange(country, 1);
         // handleList();
         // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);

@@ -10,7 +10,6 @@ import sphinx from "../home/landmarks/sphinx.png"
 import statueOfLiberty from "../home/landmarks/statueOfLiberty.png"
 import tokyoTower from "../home/landmarks/tokyoTower.png"
 import { useNavigate } from "react-router-dom";
-import { MyModal } from "./myModal";
 
 export const Home = () => {
 
@@ -67,7 +66,6 @@ export const Home = () => {
 
     return (
         <>
-            <MyModal />
             <BackGround>
                 <ButtonCSS onClick={() => navigate("/main", { state: { country: "france" }, })}>
                     <ImgLandmark src={eiffelTower} alt="France: Eiffel Tower" />

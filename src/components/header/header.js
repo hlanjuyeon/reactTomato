@@ -4,18 +4,24 @@ import { HeaderContainer } from "../styled";
 import { useLocation } from "react-router-dom";
 
 import { ApiBackground } from "../../apiBackground";
-import { BigTitle, SmallTitle } from "./styled";
+import { BigTitle, HeaderTitle, SmallTitle } from "./styled";
+import { BackBtn } from "./backBtn";
+import { BankBtn } from "./bankBtn";
 
-export const Header = () => {    const [background, setBackground] = useState(null);
+export const Header = () => {
+    const [background, setBackground] = useState(null);
 
     const location = useLocation();
     const country = location.state?.country;
 
     return (
         <HeaderContainer>
-            <BigTitle>To Do List</BigTitle>
-            <SmallTitle>Victory's Blueprint : Your Daily Missions</SmallTitle>
-
+            <BackBtn />
+            <HeaderTitle>
+                <BigTitle>To Do List</BigTitle>
+                <SmallTitle>Victory's Blueprint : Your Daily Missions</SmallTitle>
+            </HeaderTitle>
+            <BankBtn />
         </HeaderContainer>
     );
 }

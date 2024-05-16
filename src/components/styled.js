@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
-    background-color: purple;
     height: 100px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     font-size: calc(10px + 2vmin);
     color: white;
 `;
@@ -55,6 +54,8 @@ export const TitleContainer = styled.span`
 export const InputFieldContainer = styled.div`
     display: flex;
     justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding-bottom: 20px;
 `;
 
 export const DeadLineCSS = styled.div`
@@ -73,4 +74,3 @@ export const BottomList = styled.div`
     align-items: baseline;
     width: 100%;
 `;
-

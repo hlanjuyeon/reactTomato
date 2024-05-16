@@ -4,8 +4,21 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, InputLabel, Select, TextField } from "@mui/material";
 import { isLabelWithInternallyDisabledControl } from "@testing-library/user-event/dist/utils";
+import { FormControl } from "react-bootstrap";
 
-export const ListItemCSS = styled(ListItem)({
+// export const ListItemCSS = styled(ListItem)({
+//   boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
+//   display: 'flex',
+//   flexDirection: 'column',
+//   alignItems: 'flex-start',
+//   marginBottom: '10px',
+//   padding: '10px',
+//   marginTop: '20px',
+//   background: 'white',
+//   borderRadius: '5px'
+// });
+
+export const ListItemCSS = styled(ListItem)(({ theme }) => ({
   boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
   display: 'flex',
   flexDirection: 'column',
@@ -14,8 +27,12 @@ export const ListItemCSS = styled(ListItem)({
   padding: '10px',
   marginTop: '20px',
   background: 'white',
-  borderRadius: '5px'
-});
+  borderRadius: '5px',
+
+  '& .css-518kzi-MuiListItemSecondaryAction-root ': {
+    top: '25% !important',
+  },
+})); 
 
 export const ListItemTextCSS = styled(ListItemText)(({ theme }) => ({
   '& .MuiListItemText-primary': {
@@ -29,17 +46,16 @@ export const TextFieldCSS = styled(TextField)({
   marginRight: '20px',
   marginTop: '8px',
   width: '600px',
-  color: 'white !important',
+  // color: 'white !important',
 
-  '& .label' : {
-    color: 'white !important',
-  }
+  // '& .label' : {
+  //   color: 'white !important',
+  // }
 
 }); 
 
 export const InputLabelCSS = styled(InputLabel)({
   marginTop: '8px !important',
-  color: 'white !important'
 });
 
 export const SelectCSS = styled(Select)({
@@ -51,6 +67,5 @@ export const ButtonCSS = styled(Button)({
   height: '55px',
   marginTop: '28.5px',
 });
-
 
 

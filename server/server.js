@@ -50,11 +50,34 @@ app.post("/list", (req, res) => {
 
     const sqlQuery =
         `SELECT id, country, content, deadline, priority, DATE_FORMAT(writeDate, '%W, %e %M %Y, %r') AS formattedWriteDate, DATE_FORMAT(updateDate, '%W, %e %M %Y, %r') AS formattedUpdateDate, state, isTrash, bank FROM board
-        WHERE country = ? AND state = ?
+        WHERE country = ? AND isTrash = 0 AND state = ? 
         ORDER BY 
             updateDate DESC`;
 
     db.query(sqlQuery, [country, state], (err, result) => {
+        if (err) {
+            console.error("Database query error:", err); // 데이터베이스 쿼리 오류 로그 추가
+            res.status(500).send({ success: false, error: err.message });
+        } else {
+            console.log("Query result:", result); // 쿼리 결과 로그 추가
+            res.send({ success: true, data: result });
+        }
+    });
+});
+
+app.post("/list/trash", (req, res) => {
+    console.log("Received /list/trash request:", req.body); // 요청 받은 내용 로그 추가
+
+    const country = req.body.country;
+    const isTrash = req.body.isTrash;
+
+    const sqlQuery =
+        `SELECT id, country, content, deadline, priority, DATE_FORMAT(writeDate, '%W, %e %M %Y, %r') AS formattedWriteDate, DATE_FORMAT(updateDate, '%W, %e %M %Y, %r') AS formattedUpdateDate, state, isTrash, bank FROM board
+        WHERE country = ? AND isTrash = 1
+        ORDER BY 
+            updateDate DESC`;
+
+    db.query(sqlQuery, [country, isTrash], (err, result) => {
         if (err) {
             console.error("Database query error:", err); // 데이터베이스 쿼리 오류 로그 추가
             res.status(500).send({ success: false, error: err.message });
@@ -151,18 +174,37 @@ app.post("/update/state", (req, res) => {
 });
 
 // update isTrash
+// app.post("/update/trash", (req, res) => {
+//     console.log("/update/trash", req.body);
+
+//     const id = req.body.id;
+//     const updateDate = req.body.updateDate;
+//     const isTrash = req.body.isTrash;
+//     const state = req.body.state;
+
+//     const sqlQuery =
+//         `UPDATE BOARD SET updateDate=?, state=?, isTrash=? WHERE id=?`;
+
+//     db.query(sqlQuery, [updateDate, state, isTrash, id], (err, result) => {
+//         if (err) {
+//             res.status(500).send({ success: false, error: err.message });
+//         } else {
+//             res.send({ success: true, data: result });
+//             console.log("result=", result);
+//         }
+//     });
+// });
 app.post("/update/trash", (req, res) => {
     console.log("/update/trash", req.body);
 
     const id = req.body.id;
     const updateDate = req.body.updateDate;
     const isTrash = req.body.isTrash;
-    const state = req.body.state;
 
     const sqlQuery =
-        `UPDATE BOARD SET updateDate=?, state=?, isTrash=? WHERE id=?`;
+        `UPDATE BOARD SET updateDate=?, isTrash=? WHERE id=?`;
 
-    db.query(sqlQuery, [updateDate, state, isTrash, id], (err, result) => {
+    db.query(sqlQuery, [updateDate, isTrash, id], (err, result) => {
         if (err) {
             res.status(500).send({ success: false, error: err.message });
         } else {

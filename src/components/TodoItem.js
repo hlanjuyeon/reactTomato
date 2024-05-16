@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Checkbox } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { BottomList, ButtonContainer, DeadLineCSS, DeadLineCss, StateBtn } from "./styled";
+import { BottomList, ButtonContainer, ColorButton, DeadLineCSS, DeadLineCss, StateBtn } from "./styled";
 
 import { ListItemCSS, ListItemTextCSS } from "./styledSystem";
 import { High } from "./priority/High";
@@ -15,6 +15,7 @@ import axios from "axios";
 import { display } from "@mui/system";
 import { StartBtn, StarthBtn } from "./state/startBtn";
 import { FinishBtn } from "./state/finishBtn";
+import { ColorButtonCSS } from "./colorButtonCSS";
 
 export const TodoItem = ({
     todoitem,
@@ -46,6 +47,35 @@ export const TodoItem = ({
         }
     };
 
+    const reenderBottomBtn = () => {
+        if (todoitem.state === "trash") {
+            return (
+                <StateBtn>
+                    <ColorButtonCSS variant="contained">Restore</ColorButtonCSS>
+                </StateBtn>
+            );
+        } else {
+            return (
+                <StateBtn
+                    onClick={() => handleState(todoitem.id, todoitem.state)}
+                >{renderStateBtn()}</StateBtn>
+
+            );
+        }
+    }
+
+    const renderDeleteBtn = () => {
+        if (todoitem.state === "trash") {
+            return <></>
+        } else {
+            return (
+                <IconButton onClick={() => handleTrash(todoitem.id)}>
+                    <DeleteIcon />
+                </IconButton>
+            );
+        }
+    }
+
     useEffect(() => {
         // handleList();
     }, []);
@@ -64,11 +94,11 @@ export const TodoItem = ({
     //         });
     // };
 
+
+
     return (
         <ListItemCSS secondaryAction={
-            <IconButton edge="end" aria-label="comments" onClick={() => handleTrash(todoitem.id)}>
-                <DeleteIcon />
-            </IconButton>
+            <>{renderDeleteBtn()}</>
         }>
             <ButtonContainer >
                 <ListItemIcon>
@@ -83,9 +113,7 @@ export const TodoItem = ({
             <>{renderPriority()}</>
             <BottomList>
                 <DeadLineCSS>{todoitem.deadline}</DeadLineCSS>
-                <StateBtn
-                    onClick={() => handleState(todoitem.id, todoitem.state)}
-                >{renderStateBtn()}</StateBtn>
+                <>{reenderBottomBtn()}</>
             </BottomList>
         </ListItemCSS>
     );
