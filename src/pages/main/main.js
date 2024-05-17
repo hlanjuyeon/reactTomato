@@ -1,7 +1,5 @@
 import { React, useEffect, useState } from 'react';
 
-import { TodoList } from '../../components/2todoList';
-
 import { Container, List, StyledContainer } from './styled';
 
 import { Header } from '../../components/header/header';
@@ -210,7 +208,7 @@ export const Main = (props) => {
             });
     };
 
-    // update isTrash
+    // update isTrash = 1 (휴지통)
     const handleUpdateTrash = (id, country) => {
 
         axios
@@ -218,11 +216,28 @@ export const Main = (props) => {
                 id: id,
                 updateDate: formattedDate, // 수정됨
                 isTrash: true, // 수정됨
-                // state: "trash", // 수정됨
             })
             .then(() => {
                 console.log("Trash 업데이트 성공"); // 성공 로그 추가
                 handleIsTrashChange(country, 1);
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    };
+
+    // update isTrash = 0 (복원)
+    const handleUpdateRestore = (id, country) => {
+
+        axios
+            .post("http://localhost:3700/update/trash", {
+                id: id,
+                updateDate: formattedDate, // 수정됨
+                isTrash: false, // 수정됨
+            })
+            .then(() => {
+                console.log("Trash 업데이트 성공"); // 성공 로그 추가
+                handleIsTrashChange(country, 0);
             })
             .catch((e) => {
                 console.error(e);
@@ -246,6 +261,7 @@ export const Main = (props) => {
                             // handlelist={() => getList(country, "nextup")}
                             handleCount={() => getCount(country, 'nextup')}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleRestore={(id) => handleUpdateRestore(id, country)} // 수정됨
                             handleState={(id, todoitemState) => handleUpdateState(id, todoitemState)} // 수정됨
                             country={country}
                         />
@@ -254,6 +270,7 @@ export const Main = (props) => {
                             // handlelist={() => getList(country, "inprogress")}
                             handleCount={() => getCount(country, "inprogress")}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleRestore={(id) => handleUpdateRestore(id, country)} // 수정됨
                             handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />
@@ -263,6 +280,7 @@ export const Main = (props) => {
                             // handlelist={() => getList(country, "complete")}
                             handleCount={() => getCount(country, "complete")}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleRestore={(id) => handleUpdateRestore(id, country)} // 수정됨
                             handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />
@@ -271,6 +289,7 @@ export const Main = (props) => {
                             // handlelist={() => getList(country, "trash")}
                             handleCount={() => getCount(country)}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
+                            handleRestore={(id) => handleUpdateRestore(id, country)} // 수정됨
                             handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}
                         />

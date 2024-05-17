@@ -38,4 +38,4 @@ export const Mac = () => {
 // 지도 경도위도 api
 // ip주소 나라이름 api
 // 인스타그램 공유 api
-// px -> rm으ㅗㄹ
+// px -> rm
