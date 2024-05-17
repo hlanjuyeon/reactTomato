@@ -17,7 +17,7 @@ export const Mac = () => {
                     </WindowControls>
                 </WindowHeader>
                 <WindowContent>
-                    <p>Dear. Korea User</p>
+                    <p>Dear. User From Korea</p>
                     <p>
                         What you nedd today may be a small trip.
                         Have a time of healing.
@@ -38,3 +38,4 @@ export const Mac = () => {
 // 지도 경도위도 api
 // ip주소 나라이름 api
 // 인스타그램 공유 api
+// px -> rm으ㅗㄹ
