@@ -20,7 +20,10 @@ export const Main = (props) => {
     const country = location.state?.country;
 
     // List 저장
-    const [todolist, setTodoList] = useState([]); // 일반 할 일 목록 상태
+    const [nextupList, setNextupList] = useState([]); // 일반 할 일 목록 상태
+    const [inprogressList, setInprogressList] = useState([]); // 일반 할 일 목록 상태
+    const [completeList, setCompleteList] = useState([]); // 일반 할 일 목록 상태
+
     const [trashList, setTrashList] = useState([]); // 휴지통 목록 상태
 
     // Item 조회
@@ -47,44 +50,21 @@ export const Main = (props) => {
         if (country) {
             getBackground();
 
-            // getList(currentList.country, currentList.state);
-            getCount(currentList.country, currentList.state);
-
-            const fetchList = async (country, state) => {
-                try {
-                    const response = await axios.post(`http://localhost:3700/list`, { country: country, state: state }, { headers: { "Content-Type": "application/json", } });
-                    console.log("fetchList response:", response); // 응답 로그 추가
-                    return response.data.data;
-                } catch (error) {
-                    console.error(`Error fetching ${state}: ${country}:`, error.response || error); // 오류 응답 로그 추가
-                    return []; // 오류가 발생한 경우 빈 배열 반환
-                }
-            };
-
-            const fetchListTrash = async (country, isTrash) => {
-                try {
-                    const response = await axios.post(`http://localhost:3700/list/trash`, { country: country, isTrash: isTrash }, { headers: { "Content-Type": "application/json", } });
-                    console.log("fetchListTrash response:", response); // 응답 로그 추가
-                    return response.data.data;
-                } catch (error) {
-                    console.error(`Error fetching ${isTrash}: ${country}:`, error.response || error); // 오류 응답 로그 추가
-                    return []; // 오류가 발생한 경우 빈 배열 반환
-                }
-            };
-
             const getListAll = async () => {
                 try {
-                    const responses = await Promise.all([
-                        fetchList("france", "nextup"),
-                        fetchList("france", "inprogress"),
-                        fetchList("france", "complete"),
-                    ]);
+                    const nextupResponse = await getList("france", "nextup");
+                    const inprogressResponse = await getList("france", "inprogress");
+                    const completeResponse = await getList("france", "complete");
+                    const trashResponse = await getListTrash("france", 1);
 
-                    const trashResponse = await fetchListTrash("france", 1);
+                    console.log("nextup:", nextupResponse); // combinedList 확인
+                    console.log("inprogress:", inprogressResponse); // combinedList 확인
+                    console.log("complete:", completeResponse); // combinedList 확인
+                    console.log("trash:", trashResponse); // combinedList 확인
 
-                    const combinedList = responses.flatMap(res => res);
-                    console.log("combinedList:", combinedList); // combinedList 확인
-                    setTodoList(combinedList);
+                    setNextupList(nextupResponse);
+                    setInprogressList(inprogressResponse);
+                    setCompleteList(completeResponse);
                     setTrashList(trashResponse); // 휴지통 목록 별도로 설정
                 } catch (error) {
                     console.error("Overall error in fetching lists:", error);
@@ -97,7 +77,7 @@ export const Main = (props) => {
 
     }, [country, currentList, currentIsTrash]); // country가 변경될 때마다 데이터를 다시 불러옵니다.
 
-    const handleListChange = (country, state) => {
+    const handleListChange = (country, state = null) => {
         console.log("handleListChange -", country, state);
         setCurrentList({ country, state });
     };
@@ -118,28 +98,28 @@ export const Main = (props) => {
     const today = new Date();
     const formattedDate = formatDate(today);
 
-    // // List 조회  
-    // const getList = async (country, state) => {
-    //     console.log("getList -");
-    //     await axios
-    //         .post(`http://localhost:3700/list`, // URL 수정
-    //             {
-    //                 country: country,
-    //                 state: state
-    //             },
-    //             {
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 }
-    //             })
-    //         .then((res) => {
-    //             const filteredList = res.data.data.filter(item => item.country === country && item.state === state);
-    //             setTodoList(filteredList);
-    //         })
-    //         .catch((e) => {
-    //             console.error(e);
-    //         });
-    // };
+    // List 조회  
+    const getList = async (country, state) => {
+        try {
+            const response = await axios.post(`http://localhost:3700/list`, { country: country, state: state }, { headers: { "Content-Type": "application/json", } });
+            console.log("fetchList response:", response); // 응답 로그 추가
+            return response.data.data;
+        } catch (error) {
+            console.error(`Error fetching ${state}: ${country}:`, error.response || error); // 오류 응답 로그 추가
+            return []; // 오류가 발생한 경우 빈 배열 반환
+        }
+    };
+
+    const getListTrash = async (country, isTrash) => {
+        try {
+            const response = await axios.post(`http://localhost:3700/list/trash`, { country: country, isTrash: isTrash }, { headers: { "Content-Type": "application/json", } });
+            console.log("fetchListTrash response:", response); // 응답 로그 추가
+            return response.data.data;
+        } catch (error) {
+            console.error(`Error fetching ${isTrash}: ${country}:`, error.response || error); // 오류 응답 로그 추가
+            return []; // 오류가 발생한 경우 빈 배열 반환
+        }
+    };
 
     // get Count
     const getCount = async (country, state) => {
@@ -156,7 +136,8 @@ export const Main = (props) => {
                     }
                 })
             .then((res) => {
-                const count = res.data.data[0]['count(*)'];
+                // 가정한 응답 구조에 맞게 수정
+                const count = res.data.data.count;
                 console.log("getCount 개수 : ", count);
             })
             .catch((e) => {
@@ -261,7 +242,7 @@ export const Main = (props) => {
                         country={country} />
                     <List>
                         <NextUpList
-                            todoList={todolist.filter(item => item.state === 'nextup')}
+                            todoList={nextupList}
                             // handlelist={() => getList(country, "nextup")}
                             handleCount={() => getCount(country, 'nextup')}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
@@ -269,7 +250,7 @@ export const Main = (props) => {
                             country={country}
                         />
                         <InProgressList
-                            todoList={todolist.filter(item => item.state === 'inprogress')}
+                            todoList={inprogressList}
                             // handlelist={() => getList(country, "inprogress")}
                             handleCount={() => getCount(country, "inprogress")}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
@@ -277,7 +258,8 @@ export const Main = (props) => {
                             country={country}
                         />
                         <CompleteList
-                            todoList={todolist.filter(item => item.state === 'complete')}
+                            // todoList={todolist.filter(item => item.state === 'complete')}
+                            todoList={completeList}
                             // handlelist={() => getList(country, "complete")}
                             handleCount={() => getCount(country, "complete")}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
@@ -287,7 +269,7 @@ export const Main = (props) => {
                         <TrashList
                             todoList={trashList} // 이제 trashList를 직접 전달
                             // handlelist={() => getList(country, "trash")}
-                            handleCount={() => getCount(country, 1)}
+                            handleCount={() => getCount(country)}
                             handleTrash={(id) => handleUpdateTrash(id, country)} // 수정됨
                             handleState={(id, todoitemState) => handleUpdateState(id, todoitemState, country)} // 수정됨
                             country={country}

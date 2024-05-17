@@ -5,14 +5,10 @@ import { TodoItem } from "../todoItem";
 
 export const InProgressList = ({
     todoList,
-    // handleList,
     handleState,
     handleTrash,
     country,
 }) => {
-    // const [count, setCount] = useState(0);
-    // const [currentList, setCurrentList] = useState({ country, state: "" });
-
     const [count, setCount] = useState(todoList.length);
     const [currentList, setCurrentList] = useState({ country, state: "inprogress" });
 
@@ -28,7 +24,7 @@ export const InProgressList = ({
 
         // todoList의 변화를 감지하여 count를 업데이트합니다.
         setCount(todoList.length);
-    }, []);
+    }, [country, todoList]);
 
     console.log("개수", count); // todoList.length 대신 count를 출력합니다.
 

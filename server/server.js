@@ -89,7 +89,7 @@ app.post("/list/trash", (req, res) => {
 });
 
 // get list count
-app.post("/list/count", (req, res) => { 
+app.post("/list/count", (req, res) => {
 
     console.log("/list/count");
     const state = req.body.state;
@@ -97,7 +97,10 @@ app.post("/list/count", (req, res) => {
 
     const sqlQuery =
         `SELECT count(*) FROM board
-        WHERE country = ? and (isTrash = 1 OR state = ?)`;
+        WHERE country = ? and (
+            (isTrash = 1) OR
+            (isTrash = 0 AND state = ?)
+        )`;
 
     db.query(sqlQuery, [country, state], (err, result) => {
         if (err) {

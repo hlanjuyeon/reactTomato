@@ -23,7 +23,7 @@ export const TrashList = ({
         // handleList();
         // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);
-    }, []);
+    }, [country, todoList]);
 
     console.log("개수", count); // todoList.length 대신 count를 출력합니다.
 

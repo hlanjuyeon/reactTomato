@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FloatingWindow, WindowContent, WindowControlButton, WindowControls, WindowHeader, WindowTitle } from "./styled";
+    import Button from 'react-bootstrap/Button';
+import { Link } from "react-router-dom";
 
 export const Mac = () => {
 
@@ -7,7 +9,7 @@ export const Mac = () => {
         <>
             <FloatingWindow>
                 <WindowHeader>
-                    <WindowTitle>코딩하는 안다형</WindowTitle>
+                    <WindowTitle>Trip to Do List</WindowTitle>
                     <WindowControls>
                         <WindowControlButton color="#f7d54a" />
                         <WindowControlButton color="#62c462" />
@@ -15,9 +17,24 @@ export const Mac = () => {
                     </WindowControls>
                 </WindowHeader>
                 <WindowContent>
-                    <p>맥 스타일의 창을 만들어주는 CSS.<br />공지사항을 입력하거나 안내하는 역할을 할 수 있습니다.<br />사용 방법은 무궁무진하죠!~</p>
+                    <p>Dear. Korea User</p>
+                    <p>
+                        What you nedd today may be a small trip.
+                        Have a time of healing.
+                    </p>
+                    <Link to="/home"> 
+                    <Button variant="secondary" size="lg">
+                        Shall we depart now?
+                    </Button>
+                    </Link>
                 </WindowContent>
             </FloatingWindow>
         </>
     );
 }
+
+// 복원
+// 포인트
+// 지도 경도위도 api
+// ip주소 나라이름 api
+// 인스타그램 공유 api

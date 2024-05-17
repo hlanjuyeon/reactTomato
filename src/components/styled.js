@@ -7,7 +7,8 @@ export const HeaderContainer = styled.header`
     align-items: center;
     justify-content: space-between;
     font-size: calc(10px + 2vmin);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding-top: 20px;
 `;
 
 export const CheckContainer = styled.div`
@@ -36,7 +37,7 @@ export const UlContainer = styled.ul`
 
 export const ButtonContainer = styled.button`
     border: 0;
-    background-color: transparent;
+    background-color: inherit;
     margin-right: 20px;
     display: flex;
     flex-direction: row;

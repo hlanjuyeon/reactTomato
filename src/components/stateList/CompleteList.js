@@ -6,12 +6,11 @@ import { FinishBtn } from "../state/finishBtn";
 
 export const CompleteList = ({
     todoList,
-    // handleList,
     handleState,
     handleTrash,
     country
 }) => {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(todoList.length);
     const [currentList, setCurrentList] = useState({ country, state: "complete" });
 
     const handleListChange = (country, state) => {
@@ -21,12 +20,10 @@ export const CompleteList = ({
 
     useEffect(() => {
         handleListChange(country, 'complete');
-        // handleList();
-        // todoList의 길이를 count에 할당합니다.
         setCount(todoList.length);
-    }, []);
+    }, [country, todoList]);
 
-    console.log("개수", count); // todoList.length 대신 count를 출력합니다.
+    console.log("11111111개수", count); // todoList.length 대신 count를 출력합니다.
 
     return (
         <CompleteBox>

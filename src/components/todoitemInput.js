@@ -49,7 +49,11 @@ export const TodoitemInput = (props) => {
             content: content,
             priority: priority,
             deadline: formatDate(deadline) // 날짜 포매팅 함수를 props로 전달받아 사용
-        });
+        }).then((res) => {
+            setContent("");
+            setPriority("");
+            setDeadline(null);
+        })
     };
     
 

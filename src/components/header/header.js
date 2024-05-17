@@ -4,7 +4,7 @@ import { HeaderContainer } from "../styled";
 import { useLocation } from "react-router-dom";
 
 import { ApiBackground } from "../../apiBackground";
-import { BigTitle, HeaderTitle, SmallTitle } from "./styled";
+import { BigTitle, GlobalStyle, GlobalStyleHeader, HeaderTitle, SmallTitle } from "./styled";
 import { BackBtn } from "./backBtn";
 import { BankBtn } from "./bankBtn";
 
@@ -15,6 +15,7 @@ export const Header = () => {
     const country = location.state?.country;
 
     return (
+        <>  
         <HeaderContainer>
             <BackBtn />
             <HeaderTitle>
@@ -23,5 +24,6 @@ export const Header = () => {
             </HeaderTitle>
             <BankBtn />
         </HeaderContainer>
+        </>
     );
 }

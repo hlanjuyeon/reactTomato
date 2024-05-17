@@ -101,13 +101,6 @@ export const TodoItem = ({
             <>{renderDeleteBtn()}</>
         }>
             <ButtonContainer >
-                <ListItemIcon>
-                    <Checkbox
-                        edge="start"
-                        checked={true}
-                        disableRipple
-                    />
-                </ListItemIcon>
                 <ListItemTextCSS primary={todoitem.content} />
             </ButtonContainer>
             <>{renderPriority()}</>
