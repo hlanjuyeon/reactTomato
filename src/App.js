@@ -8,7 +8,7 @@ import { Zero } from './pages/zero/zero';
 function App() {
 
   return (
-    <Router>
+    <Router> 
       <Routes>
         <Route
           path="/"

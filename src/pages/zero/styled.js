@@ -3,9 +3,6 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
 // 전역 스타일 정의
 export const GlobalStyle = createGlobalStyle`
-  @import url(https://fonts.googleapis.com/css?family=Righteous);
-  @import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
-
   *, *:before, *:after {
     margin: 0;
     padding: 0;

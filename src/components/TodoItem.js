@@ -1,27 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { Button, Checkbox } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import ListItemIcon from '@mui/material/ListItemIcon';
 import { BottomList, ButtonContainer, ColorButton, DeadLineCSS, DeadLineCss, StateBtn } from "./styled";
 
 import { ListItemCSS, ListItemTextCSS } from "./styledSystem";
 import { High } from "./priority/High";
 import { Low } from "./priority/Low";
 import { Medium } from "./priority/Medium";
-import axios from "axios";
-import { display } from "@mui/system";
 import { StartBtn, StarthBtn } from "./state/startBtn";
 import { FinishBtn } from "./state/finishBtn";
 import { ColorButtonCSS } from "./colorButtonCSS";
+import 'bootstrap/dist/css/bootstrap.css';
 
 export const TodoItem = ({
     todoitem,
     handleList,
     handleState,
-    handleTrash
+    handleTrash,
+    handleRestore
 }) => {
     const renderPriority = () => {
         switch (todoitem.priority) {
@@ -48,10 +46,12 @@ export const TodoItem = ({
     };
 
     const reenderBottomBtn = () => {
-        if (todoitem.state === "trash") {
+        if (todoitem.isTrash == 1) {
             return (
                 <StateBtn>
-                    <ColorButtonCSS variant="contained">Restore</ColorButtonCSS>
+                    <ColorButtonCSS variant="contained"
+                        onClick={() => handleRestore(todoitem.id)}
+                    >Restore</ColorButtonCSS>
                 </StateBtn>
             );
         } else {
@@ -65,7 +65,7 @@ export const TodoItem = ({
     }
 
     const renderDeleteBtn = () => {
-        if (todoitem.state === "trash") {
+        if (todoitem.isTrash == 1) {
             return <></>
         } else {
             return (

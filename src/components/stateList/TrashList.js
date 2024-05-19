@@ -8,6 +8,7 @@ export const TrashList = ({
     // handleList,
     handleState,
     handleTrash,
+    handleRestore,
     country,
 }) => {
     const [count, setCount] = useState(0);
@@ -38,9 +39,9 @@ export const TrashList = ({
                     return (<>
                         <TodoItem
                             todoitem={todoitem}
-                            // handleList={handleList}
                             handleTrash={handleTrash}
                             handleState={handleState}
+                            handleRestore={handleRestore}
                         /></>
                     );
                 })}

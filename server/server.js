@@ -3,6 +3,7 @@ const cors = require("cors"); // cors를 불러옴
 const mysql = require("mysql2"); // mysql을 불러옴
 const bodyParser = require("body-parser"); // 요청정보 처리
 const requestIp = require('request-ip');
+const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 
 const app = express();
 const PORT = 3700; // 포트번호 설정
@@ -16,22 +17,30 @@ const db = mysql.createPool({
     database: "todolist_db",  // 사용할 데이터베이스
 });
 
+app.use(cors());
+
 app.use(cors({
-    origin: "*",                // 출처 허용 옵션
-    credentials: true,          // 응답 헤더에 Access-Control-Allow-Credentials 추가
-    optionsSuccessStatus: 200,  // 응답 상태 200으로 설정
+    origin: "*", // 접근 권한을 부여하는 도메인
+    credentials: true, // 응답 헤더에 Access-Control-Allow-Credentials 추가
+    optionsSuccessStatus: 200, // 응답 상태 200으로 설정
 }));
 
-app.use(requestIp.mw()); // 미들웨어로 IP 정보 요청
-// app.set('trust proxy', true);
-
-app.get('/', (req, res) => {
-    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    console.log("======================console==================");
-    console.log(`Your IP is ${ip}`);
-    res.send("==============================resend==============================");
-    res.send(`Your IP is ${ip}`);
-});
+// // IP 정보를 가져오는 라우트
+// app.get('/get-ip-info', async (req, res) => {
+//     try {
+//         const { data } = await axios.get('https://api.ip2location.io/', {
+//             params: { 
+//                 key: '53F18D8FD3D03ADDEBC62CAB77505A57',
+//                 latitude: '35.661876115097144',
+//                 longitude: '139.70229325672906'
+//             }
+//         });
+//         res.json(data);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('서버 에러');
+//     }
+// });
 
 // 서버 연결 시 발생
 app.listen(PORT, '0.0.0.0', () => {
@@ -41,6 +50,23 @@ app.listen(PORT, '0.0.0.0', () => {
 // post 요청 시 값을 객체로 바꿔줌
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+// IP 정보를 가져오는 라우트
+app.get('/get-ip-info', async (req, res) => {
+    try {
+        const { latitude, longitude } = req.query;
+        const { data } = await axios.get('https://api.ip2location.io/?key=53F18D8FD3D03ADDEBC62CAB77505A57', {
+            params: { 
+                latitude: latitude,
+                longitude: longitude,
+            }
+        });
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('서버 에러');
+    }
+});
 
 app.post("/list", (req, res) => {
     console.log("Received /list request:", req.body); // 요청 받은 내용 로그 추가

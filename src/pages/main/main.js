@@ -236,7 +236,7 @@ export const Main = (props) => {
                 isTrash: false, // 수정됨
             })
             .then(() => {
-                console.log("Trash 업데이트 성공"); // 성공 로그 추가
+                console.log("Restore 업데이트 성공"); // 성공 로그 추가
                 handleIsTrashChange(country, 0);
             })
             .catch((e) => {

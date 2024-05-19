@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FloatingWindow, WindowContent, WindowControlButton, WindowControls, WindowHeader, WindowTitle } from "./styled";
-    import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 
 export const Mac = () => {
@@ -22,10 +22,10 @@ export const Mac = () => {
                         What you nedd today may be a small trip.
                         Have a time of healing.
                     </p>
-                    <Link to="/home"> 
-                    <Button variant="secondary" size="lg">
-                        Shall we depart now?
-                    </Button>
+                    <Link to="/home">
+                        <Button variant="secondary" size="lg">
+                            Shall we depart now?
+                        </Button>
                     </Link>
                 </WindowContent>
             </FloatingWindow>
